@@ -181,7 +181,7 @@ module.exports = {
 	'Route.to(#function)': function () {
 		var ok = false,
 			route = new Route({
-				route: function (how, where) {
+				_route: function (how, where) {
 					ok = true;
 					assert.equal(where, callback);
 					assert.equal(how, route);
