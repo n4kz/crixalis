@@ -1,29 +1,38 @@
 {
-	"name": "crixalis",
-	"version": "0.1.4",
-	"description": "Lightweight web framework",
-	"main": "./lib/controller.js",
-	"author": {
-		"name": "Alexander Nazarov",
-		"email": "nfokz@yandex.ru"
-	},
-	"devDependencies": {
-		"expresso": ">=0.9.2",
-		"yuidoc": ">=0.3.30"
-	},
-	"repository": {
-		"type": "git",
-		"url": "http://github.com/n4kz/crixalis.git"
-	},
-	"yuidoc": {
-		"name": "Crixalis",
-		"description": "Lightweight web framework",
-		"url": "http://github.com/n4kz/crixalis",
-		"version": "0.1.4",
-		"linkNatives": "true",
-		"options": {
-			"outdir": "doc",
-			"paths": "lib"
-		}
-	}
+  "name": "crixalis",
+  "version": "0.1.4",
+  "description": "Lightweight web framework",
+  "main": "./lib/controller.js",
+  "author": {
+    "name": "Alexander Nazarov",
+    "email": "nfokz@yandex.ru"
+  },
+  "devDependencies": {
+    "expresso": ">=0.9.2",
+    "yuidocjs": ">=0.3.30"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/n4kz/crixalis.git"
+  },
+  "yuidoc": {
+    "name": "Crixalis",
+    "description": "Lightweight web framework",
+    "url": "http://github.com/n4kz/crixalis",
+    "version": "0.1.4",
+    "linkNatives": "true",
+    "options": {
+      "outdir": "doc",
+      "paths": "lib"
+    }
+  },
+  "dependencies": {},
+  "optionalDependencies": {},
+  "engines": {
+    "node": "*"
+  },
+  "homepage": "http://crixalis.n4kz.com",
+  "scripts": {
+    "test": "make test"
+  }
 }
