@@ -26,6 +26,12 @@ c.router()
 				'second=123DFIQWE; domain=.localhost; path=/set'
 			]
 		});
+	})
+	.from('/get')
+	.to(function () {
+		assert.equal(this.cookies.test, 3124);
+		assert.equal(this.cookies.foob, 'ok');
+		assert.equal(Object.keys(this.cookies).length, 2);
 	});
 
 module.exports = {
@@ -36,5 +42,17 @@ module.exports = {
 		}, {
 			status: 200,
 		}, 'Set cookie');
+	},
+
+	'cookie#get': function () {
+		assert.response(server, {
+			url: '/get?test=647',
+			method: 'GET',
+			headers: {
+				Cookie: 'test=3124; foob=ok'
+			}
+		}, {
+			status: 200,
+		}, 'Get cookie');
 	}
 };
