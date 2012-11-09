@@ -24,8 +24,17 @@ methods.forEach(function (method) {
 	counters[method] = 0;
 
 	c.router({ url: '/', method: method }).to(function () {
+		var that = this;
 		i++;
 		counters[method]++;
+
+		methods.forEach(function (m) {
+			if (m === that.method) {
+				assert(that['is_' + m.toLowerCase()]);
+			} else {
+				assert(!that['is_' + m.toLowerCase()]);
+			}
+		});
 	});
 });
 
@@ -38,7 +47,7 @@ methods.forEach(function (method) {
 			method: method 
 		}, {
 			status: 200,
-			'Content-Type': 'text/html',
+			'Content-Type': 'text/html'
 		}, function () {
 			tests++;
 
