@@ -4,8 +4,7 @@ var assert = require('assert'),
 	http = require('http'),
 	Crixalis = require('../lib/controller.js'),
 	c = new Crixalis(),
-	server = http.createServer(c.handler()),
-	plan = {};
+	server = http.createServer(c.handler());
 
 c.router()
 	.from('/set')
