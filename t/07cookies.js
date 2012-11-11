@@ -15,13 +15,14 @@ c.router()
 			domain: '.localhost'
 		}).cookie({
 			name: 'second',
+			path: '/set',
 			value: '123DFIQWE',
 			domain: '.localhost'
 		})
 
 		assert.deepEqual(this.headers, {
 			'Set-Cookie': [
-				'first=256; domain=.localhost; path=/set',
+				'first=256; domain=.localhost',
 				'second=123DFIQWE; domain=.localhost; path=/set'
 			]
 		});
