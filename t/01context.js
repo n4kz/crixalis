@@ -22,7 +22,7 @@ module.exports.testAsync = function (beforeExit, assert) {
 			method: 'GET',
 			url: '/test?param=5&format=unknown',
 			headers: {
-				host: 'test.localhost'
+				host: 'test.localhost:3000'
 			},
 			connection: {
 				remoteAddress: '127.0.0.1'
@@ -38,8 +38,11 @@ module.exports.testAsync = function (beforeExit, assert) {
 	assert.equal(context.res, response);
 	assert.equal(context.method, request.method);
 	assert.equal(context.url, '/test');
+	assert.equal(context.host, 'test.localhost');
+	assert.strictEqual(context.port, 3000);
 	assert.ok(context.is_get);
 	assert.ok(!context.is_post);
+	assert.ok(!context.is_head);
 
 	/* Params */
 	assert.type(context.params, 'object');
