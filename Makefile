@@ -4,4 +4,7 @@ test:
 docs:
 	yuidoc
 
+clean:
+	rm *.gz *.def
+
 all: test docs
