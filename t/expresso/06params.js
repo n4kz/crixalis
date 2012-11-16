@@ -2,7 +2,7 @@
 
 var assert = require('assert'),
 	http = require('http'),
-	Crixalis = require('../lib/controller.js'),
+	Crixalis = require('../../lib/controller.js'),
 	c = new Crixalis(),
 	server = http.createServer(c.handler()),
 	plan = {};

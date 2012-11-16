@@ -3,7 +3,7 @@
 var assert = require('assert'),
 	http = require('http'),
 	methods = ['GET', 'POST', 'HEAD', 'OPTIONS'],
-	Crixalis = require('../lib/controller.js'),
+	Crixalis = require('../../lib/controller.js'),
 	i = 0,
 	j = 0,
 	c = new Crixalis(),

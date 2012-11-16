@@ -1,7 +1,7 @@
 'use strict';
 
 var assert = require('assert'),
-	Route  = require('../lib/route.js');
+	Route  = require('../../lib/route.js');
 
 module.exports = {
 	'new Route(c, \'/test\')': function () {

@@ -1,7 +1,7 @@
 'use strict';
 
 var assert = require('assert'),
-	Context = require('../lib/context.js'),
+	Context = require('../../lib/context.js'),
 	events = {};
 
 function Controller () {
