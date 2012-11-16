@@ -2,7 +2,7 @@ compile:
 	coffee --lint --compile  t/lib/*.coffee t/*.coffee
 
 test: compile
-	vows --tap t/09accept.js
+	vows --tap -i t/*.js
 
 expresso:
 	script/test.sh
