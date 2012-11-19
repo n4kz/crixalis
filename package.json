@@ -1,6 +1,6 @@
 {
   "name": "crixalis",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "Lightweight web framework",
   "main": "./lib/controller.js",
   "author": {
@@ -8,6 +8,8 @@
     "email": "nfokz@yandex.ru"
   },
   "devDependencies": {
+    "vows": ">=0.6.0",
+    "coffee-script": "*",
     "expresso": ">=0.9.2",
     "yuidocjs": ">=0.3.30"
   },
@@ -19,7 +21,7 @@
     "name": "Crixalis",
     "description": "Lightweight web framework",
     "url": "http://github.com/n4kz/crixalis",
-    "version": "0.1.8",
+    "version": "0.1.9",
     "linkNatives": "true",
     "options": {
       "outdir": "doc",
@@ -28,6 +30,7 @@
   },
   "dependencies": {},
   "optionalDependencies": {
+    "coffee-script": "*",
     "jade": "*"
   },
   "engines": {
