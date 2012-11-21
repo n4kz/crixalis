@@ -521,8 +521,9 @@ module.exports = {
 		assert(route.match({ types: ['html/html', 'text/text'] }));
 		assert(route.match({ types: ['text/text', 'html/html'] }));
 		assert(route.match({ types: ['text/text', 'text/html'] }));
+		assert(route.match({ types: ['text/*'] }));
+		assert(route.match({ types: ['text/plain', '*/*'] }));
 
-		assert(!route.match({}));
 		assert(!route.match({ types: [] }));
 		assert(!route.match({ types: ['application/json'] }));
 		assert(!route.match({ types: ['application/json', 'html/html'] }));

@@ -23,6 +23,14 @@ c.router('/_')
 		assert.equal @types.length, @params.types
 		@body = @types.join '|'
 
+c.router('/_')
+	.set
+		types: ['image/png', 'custom/type']
+	.to ->
+		assert Array.isArray @types
+		assert.equal @types.length, @params.types
+		@body = @types.join '%'
+
 vows
 	.describe('accept')
 	.addBatch
@@ -191,5 +199,58 @@ vows
 					assert.equal response.statusCode, 200
 					assert.equal response.body, 'text/javascript|application/javascript'
 
-			# TODO: type/*, */*
+		subtype:
+			topic:
+				host: '127.0.0.1'
+				port: 3000
+				path: '/_?types=1'
+
+			first:
+				topic: (topic) ->
+					params = copy topic
+					params.headers = accept: 'image/*'
+					fetch params, @callback
+					undefined
+
+				response: (error, response) ->
+					assert not error
+					assert.equal response.statusCode, 200
+					assert.equal response.body, 'image/*'
+
+			second:
+				topic: (topic) ->
+					params = copy topic
+					params.headers = accept: 'application/json, custom/*'
+					params.path = '/_?types=2'
+					fetch params, @callback
+					undefined
+
+				response: (error, response) ->
+					assert not error
+					assert.equal response.statusCode, 200
+					assert.equal response.body, 'application/json%custom/*'
+
+			fail:
+				topic: (topic) ->
+					params = copy topic
+					params.headers = accept: 'archive/*, video/mpg'
+					fetch params, @callback
+					undefined
+
+				response: (error, response) ->
+					assert not error
+					assert.equal response.statusCode, 404
+
+			wildcard:
+				topic: (topic) ->
+					params = copy topic
+					params.headers = accept: '*/*'
+					fetch params, @callback
+					undefined
+
+				response: (error, response) ->
+					assert not error
+					assert.equal response.statusCode, 200
+					assert.equal response.body, '*/*'
+
 	.export module
