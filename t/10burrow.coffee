@@ -40,6 +40,53 @@ vows
 				assert cx.counter is 1
 				assert not Object.keys(b).length
 
+		chain:
+			topic: new Burrow()
+
+			flow: (b) ->
+				b.counter = 0
+
+				b.tunnel inc, b
+				b.tunnel inc, b
+				b.tunnel inc, b
+				b.tunnel((->
+					assert @results.length is 3
+					assert @counter is 3
+					assert @results.pop() is 3
+					@forward()
+				), b)
+
+				b.forward()
+
+			clean: (b) ->
+				assert not Object.keys(b).length
+
+		error:
+			topic: new Burrow()
+
+			flow: (b) ->
+				b.counter = 0
+
+				b.error = (error) ->
+					assert @counter is 2
+					assert @results.length is 2
+					assert @results.pop() is 2
+					assert error is true
+
+				b.tunnel inc, b
+				b.tunnel inc, b
+
+				b.tunnel (next) ->
+					next(true)
+
+				b.tunnel ->
+					assert false
+
+				b.forward()
+
+			clean: (b) ->
+				assert not Object.keys(b).length
+
 	.export module
 
 context = (cx, next) ->
@@ -48,3 +95,7 @@ context = (cx, next) ->
 	assert typeof this is 'object'
 	assert typeof next is 'function'
 	next()
+
+inc = ->
+	@counter++
+	@forward(null, @counter)
