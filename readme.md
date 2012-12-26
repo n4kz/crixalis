@@ -1,4 +1,4 @@
-# Crixalis 
+# Crixalis
 
 Lightweight web framework for node.js
 
@@ -66,5 +66,25 @@ c.router()
 			}
 		});
 	});
+
+```
+
+Plugins
+
+```js
+
+c.plugin('./plugins/static');
+
+c.router({
+	async: true,
+	pattern: /^(.*)$/,
+	capture: {
+		'$1': 'path'
+	}
+}).to(function () {
+	var file = './public' + this.params.path;
+
+	this.serve(file);
+});
 
 ```
