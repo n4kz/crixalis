@@ -1,12 +1,13 @@
 #!/usr/bin/node
 
 var http = require('http'),
-	Crixalis = require('crixalis'),
-	c = new Crixalis(),
+	c    = require('crixalis'),
 	port = 3000,
 	root = './doc';
 
-c.plugin('./plugins/static');
+c
+	.plugin('static')
+	.plugin('compression')
 
 c.expires = {
 	'application/javascript' : 8.64E+8,
@@ -44,4 +45,4 @@ c.router({
 	});
 });
 
-server = http.createServer(c.handler()).listen(port);
+server = http.createServer(c.handler).listen(port);

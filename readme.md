@@ -9,7 +9,7 @@ General usage
 ```js
 
 var http = require('http'),
-	c = new require('crixalis')(),
+	c = require('crixalis'),
 	port = 80;
 
 c.on('default', function () {
@@ -30,7 +30,7 @@ c.router()
 		};
 	});
 
-http.createServer(c.handler()).listen(port)
+http.createServer(c.handler).listen(port)
 
 ```
 
