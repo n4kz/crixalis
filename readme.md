@@ -14,7 +14,7 @@ var http = require('http'),
 
 c.on('default', function () {
 	this.code = 204;
-	this.emit('end');
+	this.render();
 });
 
 c.router()
