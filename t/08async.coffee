@@ -3,10 +3,10 @@ http   = require 'http'
 vows   = require 'vows'
 fetch  = require './lib/fetch.js'
 copy   = require './lib/copy.js'
-c      = new (require '../lib/controller.js')()
+c      = require '../lib/controller.js'
 
 server = http
-	.createServer(c.handler())
+	.createServer(c.handler)
 	.listen 3000
 
 c.router

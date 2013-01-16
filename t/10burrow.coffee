@@ -1,6 +1,6 @@
 assert = require 'assert'
 vows   = require 'vows'
-c      = new (require '../lib/controller.js')()
+c      = require '../lib/controller.js'
 Burrow = require '../lib/burrow.js'
 
 vows
