@@ -4,9 +4,6 @@ compile:
 test: compile
 	vows --tap -i t/*.js
 
-expresso:
-	script/test.sh
-
 docs:
 	yuidoc
 
