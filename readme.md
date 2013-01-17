@@ -73,7 +73,7 @@ Plugins
 
 ```js
 
-c.plugin('./plugins/static');
+c.plugin('static');
 
 c.router({
 	async: true,
