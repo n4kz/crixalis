@@ -23,13 +23,9 @@ c.on('auto', function () {
 
 c.router({
 	async: true,
-	methods: ['GET', 'HEAD'],
-	pattern: /^(.*)$/,
-	capture: {
-		'$1': 'path'
-	}
-}).to(function () {
-	var file = root + '/' + this.params.path
+	methods: ['GET', 'HEAD']
+}).from(/^(.*)$/).to(function () {
+	var file = root + '/' + this.params.$1
 		.replace(/^\/*/, '')
 		.replace(/\.\.\//g, '\/'),
 		that = this;
@@ -40,7 +36,7 @@ c.router({
 
 	this.serve(file, function (error) {
 		if (error) {
-			that.emit('error', error);
+			that.error(error);
 		}
 	});
 });

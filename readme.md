@@ -59,7 +59,7 @@ c.router()
 
 		fs.readFile('index.html', function (error, data) {
 			if (error) {
-				that.emit('error', error);
+				that.error(error);
 			} else {
 				that.body = data;
 				that.render();
