@@ -3,6 +3,7 @@
 	"version": "0.2.4",
 	"description": "Lightweight web framework",
 	"main": "lib/controller.js",
+	"license": "LGPLv3",
 	"keywords": ["framework", "web", "server", "http", "static"],
 	"author": {
 		"name": "Alexander Nazarov",
@@ -40,6 +41,7 @@
 	},
 	"homepage": "http://crixalis.n4kz.com",
 	"scripts": {
-		"test": "make test"
+		"test": "make test",
+		"docs": "make docs"
 	}
 }
