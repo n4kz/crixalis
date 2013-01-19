@@ -5,7 +5,7 @@ Lightweight web framework for node.js
 # Features
 
 - Small, fully documented and easily extendable core
-- Advanced routing system (content, type, method, host) with regexp support
+- Advanced routing system (content type, method, host) with regexp support
 - Compression support (gzip, deflate)
 - Static file serving support
 
