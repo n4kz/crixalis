@@ -87,6 +87,22 @@ vows
 			clean: (b) ->
 				assert not Object.keys(b).length
 
+		nofwd:
+			topic: new Burrow()
+
+			flow: (b) ->
+				b.tunnel((->
+					@forward()
+				), b)
+				b.tunnel (next) ->
+					next()
+				b.tunnel ->
+
+				b.forward()
+
+			clean: (b) ->
+				assert not Object.keys(b).length
+
 	.export module
 
 context = (cx, next) ->
