@@ -10,20 +10,36 @@ hmn = ->
 	@compression = no
 	@events.push 'main'
 
+	if @async
+		setTimeout =>
+			@render()
+
 hme = ->
 	assert Array.isArray @events, 'events array not exists'
 	@compression = no
 	@events.push 'main'
 	@error new Error 'test'
 
+	if @async
+		setTimeout =>
+			@render()
+
 hmec = ->
 	assert Array.isArray @events, 'events array not exists'
 	@events.push 'main'
 	@error new Error 'test'
 
+	if @async
+		setTimeout =>
+			@render()
+
 hmc = ->
 	assert Array.isArray @events, 'events array not exists'
 	@events.push 'main'
+
+	if @async
+		setTimeout =>
+			@render()
 
 ha = ->
 	assert not Array.isArray @events, 'events array exists'
@@ -32,12 +48,15 @@ ha = ->
 	@body        = @url.replace /^.*\//, ''
 	@name        = @body
 
+	if @headers['x-async']
+		@async = yes
+
 	@select()
 
 hd = ->
 	assert Array.isArray @events, 'events array not exists'
 
-	if @name isnt 'dcompression'
+	unless @name.match /^a?dcompression/
 		@compression = no
 
 	@events.push 'default'
@@ -89,6 +108,10 @@ vows
 					.from('/match/compression').to(hmc)
 					.from('/match/ecompression').to(hmec)
 					.from('/match/error').to(hme)
+					.from('/match/anormal').to(hmn)
+					.from('/match/acompression').to(hmc)
+					.from('/match/aecompression').to(hmec)
+					.from('/match/aerror').to(hme)
 
 				# Setup new listeners
 				Crixalis.on 'auto', ha
@@ -100,13 +123,19 @@ vows
 					hs.call @
 					responses[@name] = @events
 
-				for path in 'normal default error compression ecompression dcompression'.split ' '
+				for path in '''
+					normal   default  error  compression  ecompression  dcompression
+					anormal adefault aerror acompression aecompression adcompression
+				'''.replace(/\n/, ' ').split ' '
 					remains++
 					options = copy params
 					options.path = '/match/' + path
 
 					options.headers =
 						'accept-encoding': 'gzip'
+
+					if path.match /^a/
+						options.headers['x-async'] = 'true'
 
 					fetch options, cb
 
@@ -135,6 +164,31 @@ vows
 			dcompression: (error, responses) ->
 				events = responses.dcompression
 				assert.deepEqual events, 'auto default compression response destroy'.split ' '
+
+			anormal: (error, responses) ->
+				events = responses.anormal
+				assert.deepEqual events, 'auto main response destroy'.split ' '
+
+			aerror: (error, responses) ->
+				events = responses.aerror
+				assert.deepEqual events, 'auto main error response destroy'.split ' '
+
+			adefault: (error, responses) ->
+				events = responses.adefault
+				assert.deepEqual events, 'auto default response destroy'.split ' '
+
+			acompression: (error, responses) ->
+				events = responses.acompression
+				assert.deepEqual events, 'auto main compression response destroy'.split ' '
+
+			aecompression: (error, responses) ->
+				events = responses.aecompression
+				assert.deepEqual events, 'auto main error compression response destroy'.split ' '
+
+			adcompression: (error, responses) ->
+				events = responses.adcompression
+				assert.deepEqual events, 'auto default compression response destroy'.split ' '
+
 
 			# TODO: same for async
 
