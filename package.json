@@ -1,6 +1,6 @@
 {
 	"name": "crixalis",
-	"version": "0.3.0",
+	"version": "0.3.1",
 	"description": "Lightweight web framework",
 	"main": "lib/controller.js",
 	"license": "LGPLv3",
@@ -23,7 +23,7 @@
 		"name": "Crixalis",
 		"description": "Lightweight web framework",
 		"url": "http://github.com/n4kz/crixalis",
-		"version": "0.3.0",
+		"version": "0.3.1",
 		"linkNatives": "true",
 		"options": {
 			"outdir": "doc",
