@@ -30,7 +30,9 @@
 			"paths": "lib"
 		}
 	},
-	"dependencies": {},
+	"dependencies": {
+		"mime": "*"
+	},
 	"optionalDependencies": {
 		"coffee-script": "*",
 		"jade": "*",
