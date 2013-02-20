@@ -111,7 +111,7 @@ vows
 					params = copy topic
 					params.path = '/post?p1=7&p2=9&p3=12'
 					params.method = 'POST'
-					params.data = 'p1=3&p2=1&p3=2'
+					params.data = 'p1=3;p2=1&p3=2'
 					fetch params, @callback
 					undefined
 
@@ -124,13 +124,13 @@ vows
 					params = copy topic
 					params.path = '/post4?p1=7&p2=9&p3=12'
 					params.method = 'POST'
-					params.data = 'p1=3+5&p3=2+9'
+					params.data = 'p1=3+5&p3=2%2B9'
 					fetch params, @callback
 					undefined
 
 				response: (error, response) ->
 					assert not error
 					assert.equal response.statusCode, 200
-					assert.equal response.body, '3 5 9 2 9'
+					assert.equal response.body, '3 5 9 2+9'
 
 	.export module
