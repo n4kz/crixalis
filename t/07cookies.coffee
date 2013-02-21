@@ -15,17 +15,37 @@ c.router
 	@cookie
 		name: 'first'
 		value: 256
-		domain: '.localhost'
-	.cookie
+		domain: 'example.com'
+
+	@cookie
 		name: 'second'
-		path: '/set'
 		value: '123DFIQWE'
-		domain: '.localhost'
+		path: '/set'
+
+	@cookie
+		name: 'third'
+		value: 'frfr'
+		http: no
+		secure: yes
+
+	time = new Date()
+
+	@cookie
+		name: 'fourth'
+		value: '753'
+		expires: time
+
+	@cookie
+		name: 'expired'
+		value: null
 
 	assert.deepEqual this.headers,
 		'Set-Cookie': [
-			'first=256; domain=.localhost',
-			'second=123DFIQWE; domain=.localhost; path=/set'
+			'first=256; domain=example.com; httponly',
+			'second=123DFIQWE; path=/set; httponly',
+			'third=frfr; secure',
+			"fourth=753; expires=#{ time.toUTCString() }; httponly",
+			"expired=; expires=#{ new Date(0).toUTCString() }; httponly"
 		]
 .set
 	url: '/get'
@@ -52,6 +72,7 @@ vows
 				response: (error, response) ->
 					assert not error
 					assert.equal response.statusCode, 200
+
 			get:
 				topic: (topic) ->
 					params = copy topic
