@@ -1,10 +1,10 @@
 {
 	"name": "crixalis",
-	"version": "0.3.1",
+	"version": "0.3.2",
 	"description": "Lightweight web framework",
 	"main": "lib/controller.js",
 	"license": "LGPLv3",
-	"keywords": ["framework", "web", "server", "http", "static"],
+	"keywords": ["framework", "rest", "web", "server", "http", "static"],
 	"author": {
 		"name": "Alexander Nazarov",
 		"email": "n4kz@n4kz.com"
@@ -12,7 +12,6 @@
 	"devDependencies": {
 		"vows": ">=0.6.0",
 		"coffee-script": "*",
-		"expresso": ">=0.9.2",
 		"yuidocjs": ">=0.3.30"
 	},
 	"repository": {
@@ -22,8 +21,8 @@
 	"yuidoc": {
 		"name": "Crixalis",
 		"description": "Lightweight web framework",
-		"url": "http://github.com/n4kz/crixalis",
-		"version": "0.3.1",
+		"url": "https://github.com/n4kz/crixalis",
+		"version": "0.3.2",
 		"linkNatives": "true",
 		"options": {
 			"outdir": "doc",
@@ -32,11 +31,6 @@
 	},
 	"dependencies": {
 		"mime": "*"
-	},
-	"optionalDependencies": {
-		"coffee-script": "*",
-		"jade": "*",
-		"less": "*"
 	},
 	"engines": {
 		"node": ">=0.6.0"
