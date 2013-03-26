@@ -7,7 +7,7 @@ c      = require '../lib/controller.js'
 
 server = http
 	.createServer(c.handler)
-	.listen 3000
+	.listen process.env.CRIXALIS_PORT
 
 c.router('/')
 	.to ->
@@ -37,7 +37,7 @@ vows
 		simple:
 			topic:
 				host: '127.0.0.1'
-				port: 3000
+				port: process.env.CRIXALIS_PORT
 				path: '/?types=0'
 
 			empty:
@@ -92,7 +92,7 @@ vows
 		priority:
 			topic:
 				host: '127.0.0.1'
-				port: 3000
+				port: process.env.CRIXALIS_PORT
 				path: '/?types=1'
 
 			float:
@@ -148,7 +148,7 @@ vows
 		type:
 			topic:
 				host: '127.0.0.1'
-				port: 3000
+				port: process.env.CRIXALIS_PORT
 				path: '/_?types=1'
 
 			first:
@@ -202,7 +202,7 @@ vows
 		subtype:
 			topic:
 				host: '127.0.0.1'
-				port: 3000
+				port: process.env.CRIXALIS_PORT
 				path: '/_?types=1'
 
 			first:

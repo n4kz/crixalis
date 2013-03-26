@@ -79,7 +79,7 @@ hc = ->
 
 server = http
 	.createServer(Crixalis.handler)
-	.listen 3000
+	.listen process.env.CRIXALIS_PORT
 
 vows
 	.describe('events')
@@ -90,7 +90,7 @@ vows
 				remains   = 0
 				params    =
 					host: '127.0.0.1'
-					port: 3000
+					port: process.env.CRIXALIS_PORT
 
 				cb = (error, result) =>
 					assert not error,                      'got result'

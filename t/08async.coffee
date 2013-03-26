@@ -7,7 +7,7 @@ c      = require '../lib/controller.js'
 
 server = http
 	.createServer(c.handler)
-	.listen 3000
+	.listen process.env.CRIXALIS_PORT
 
 c.router
 	url: '/json'
@@ -43,7 +43,7 @@ vows
 		route:
 			topic:
 				host: '127.0.0.1'
-				port: 3000
+				port: process.env.CRIXALIS_PORT
 				path: '/html'
 
 			html:

@@ -1,13 +1,16 @@
-compile:
-	coffee --lint --compile  t/lib/*.coffee t/*.coffee
+# Port for test server
+PORT=30000
 
 test: compile
-	vows --tap -i t/*.js
+	CRIXALIS_PORT=$(PORT) vows --tap -i t/*.js
+
+compile:
+	coffee --lint --compile t/lib/*.coffee t/*.coffee
 
 docs:
 	yuidoc
 
 clean:
-	rm *.gz *.def t/*.js t/lib/*.js
+	rm t/*.js t/lib/*.js
 
 all: test docs
