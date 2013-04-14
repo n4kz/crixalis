@@ -40,6 +40,10 @@ c.router
 	assert.equal Object.keys(@params).length, 3
 	@body = [@params.p1, @params.p2, @params.p3].join(' ')
 
+.from('/nopost')
+.to ->
+	assert false
+
 vows
 	.describe('params')
 	.addBatch
@@ -132,5 +136,24 @@ vows
 					assert not error
 					assert.equal response.statusCode, 200
 					assert.equal response.body, '3 5 9 2+9'
+
+			postSize:
+				topic: (topic) ->
+					params        = copy topic
+					params.path   = '/nopost'
+					params.method = 'POST'
+
+					params.data = 'p1='
+					remains = 1 << 20
+
+					while --remains
+						params.data += 'F'
+
+					fetch params, @callback
+					undefined
+
+				response: (error, response) ->
+					assert not error
+					assert.equal response.statusCode, 413
 
 	.export module
