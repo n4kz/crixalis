@@ -44,6 +44,13 @@ c.router
 .to ->
 	assert false
 
+.from('/octet')
+.to ->
+	assert @is_post
+	assert @message
+	assert.equal @message.type, 'application/octet-stream'
+	@body = @message.data
+
 vows
 	.describe('params')
 	.addBatch
@@ -87,9 +94,11 @@ vows
 
 			post1:
 				topic: (topic) ->
-					params = copy topic
-					params.path = '/post?p1=3&p2=1&p3=2'
-					params.method = 'POST'
+					params         = copy topic
+					params.path    = '/post?p1=3&p2=1&p3=2'
+					params.method  = 'POST'
+					params.headers = 'content-type' : 'application/x-www-form-urlencoded'
+
 					fetch params, @callback
 					undefined
 
@@ -99,10 +108,12 @@ vows
 
 			post2:
 				topic: (topic) ->
-					params = copy topic
-					params.path = '/post'
-					params.method = 'POST'
-					params.data = 'p1=3&p2=1&p3=2'
+					params         = copy topic
+					params.path    = '/post'
+					params.method  = 'POST'
+					params.data    = 'p1=3&p2=1&p3=2'
+					params.headers = 'content-type' : 'application/x-www-form-urlencoded'
+
 					fetch params, @callback
 					undefined
 
@@ -112,10 +123,12 @@ vows
 
 			post3:
 				topic: (topic) ->
-					params = copy topic
-					params.path = '/post?p1=7&p2=9&p3=12'
-					params.method = 'POST'
-					params.data = 'p1=3;p2=1&p3=2'
+					params         = copy topic
+					params.path    = '/post?p1=7&p2=9&p3=12'
+					params.method  = 'POST'
+					params.data    = 'p1=3;p2=1&p3=2'
+					params.headers = 'content-type' : 'application/x-www-form-urlencoded'
+
 					fetch params, @callback
 					undefined
 
@@ -125,10 +138,12 @@ vows
 
 			post4:
 				topic: (topic) ->
-					params = copy topic
-					params.path = '/post4?p1=7&p2=9&p3=12'
-					params.method = 'POST'
-					params.data = 'p1=3+5&p3=2%2B9'
+					params         = copy topic
+					params.path    = '/post4?p1=7&p2=9&p3=12'
+					params.method  = 'POST'
+					params.headers = 'content-type' : 'application/x-www-form-urlencoded'
+					params.data    = 'p1=3+5&p3=2%2B9'
+
 					fetch params, @callback
 					undefined
 
@@ -137,13 +152,14 @@ vows
 					assert.equal response.statusCode, 200
 					assert.equal response.body, '3 5 9 2+9'
 
-			postSize:
+			'entity too large':
 				topic: (topic) ->
-					params        = copy topic
-					params.path   = '/nopost'
-					params.method = 'POST'
+					params         = copy topic
+					params.path    = '/nopost'
+					params.method  = 'POST'
+					params.headers = 'content-type' : 'application/x-www-form-urlencoded'
+					params.data    = 'p1='
 
-					params.data = 'p1='
 					remains = 1 << 20
 
 					while --remains
@@ -155,5 +171,35 @@ vows
 				response: (error, response) ->
 					assert not error
 					assert.equal response.statusCode, 413
+
+			'unsupported media type':
+				topic: (topic) ->
+					params         = copy topic
+					params.path    = '/nopost'
+					params.method  = 'POST'
+					params.headers = 'content-type' : 'text/plain'
+					params.data    = 'text'
+
+					fetch params, @callback
+					undefined
+
+				response: (error, response) ->
+					assert not error
+					assert.equal response.statusCode, 415
+
+			'octet stream':
+				topic: (topic) ->
+					params         = copy topic
+					params.path    = '/octet'
+					params.method  = 'POST'
+					params.data    = 'text'
+
+					fetch params, @callback
+					undefined
+
+				response: (error, response) ->
+					assert not error
+					assert.equal response.statusCode, 200
+					assert.equal response.body, 'text'
 
 	.export module
