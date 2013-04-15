@@ -51,6 +51,13 @@ c.router
 	assert.equal @message.type, 'application/octet-stream'
 	@body = @message.data
 
+.from('/json')
+.to ->
+	assert @is_post
+	assert @message
+	assert.equal @message.type, 'application/json'
+	@body = @message.data.text
+
 vows
 	.describe('params')
 	.addBatch
@@ -187,7 +194,7 @@ vows
 					assert not error
 					assert.equal response.statusCode, 415
 
-			'octet stream':
+			'octet-stream':
 				topic: (topic) ->
 					params         = copy topic
 					params.path    = '/octet'
@@ -201,5 +208,36 @@ vows
 					assert not error
 					assert.equal response.statusCode, 200
 					assert.equal response.body, 'text'
+
+			'valid json':
+				topic: (topic) ->
+					params         = copy topic
+					params.path    = '/json'
+					params.method  = 'POST'
+					params.headers = 'content-type' : 'application/json'
+					params.data    = '{"text": "mytext"}'
+
+					fetch params, @callback
+					undefined
+
+				response: (error, response) ->
+					assert not error
+					assert.equal response.statusCode, 200
+					assert.equal response.body, 'mytext'
+
+			'invalid json':
+				topic: (topic) ->
+					params         = copy topic
+					params.path    = '/nopost'
+					params.method  = 'POST'
+					params.headers = 'content-type' : 'application/json'
+					params.data    = '{"text": mytext}'
+
+					fetch params, @callback
+					undefined
+
+				response: (error, response) ->
+					assert not error
+					assert.equal response.statusCode, 400
 
 	.export module
