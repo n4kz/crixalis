@@ -1,6 +1,5 @@
 http = require 'http'
 module.exports = (params, callback) ->
-	params.method = 'GET' if not params.method
 	request = http.request params, (response) ->
 		response.body = ''
 		response
