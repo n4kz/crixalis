@@ -1,6 +1,4 @@
 assert = require 'assert'
-fetch  = require './lib/fetch.js'
-copy   = require './lib/copy.js'
 c      = require '../lib/controller.js'
 ee     = require('events').EventEmitter
 
@@ -11,7 +9,7 @@ ee     = require('events').EventEmitter
 			topic: null
 
 			constructor: ->
-				assert.instanceOf c, c.self
+				assert.instanceOf c, c.constructor
 				assert.instanceOf c, ee
 
 			context: ->
@@ -27,7 +25,7 @@ ee     = require('events').EventEmitter
 				assert.equal c.body, ''
 
 			methods: ->
-				for method in 'router sendHeaders plugin select render error redirect cookie burrow noop'.split(' ')
+				for method in 'router sendHeaders plugin select render error redirect cookie burrow noop define'.split(' ')
 					assert.isFunction c[method]
 
 			private: ->
