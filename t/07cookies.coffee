@@ -1,13 +1,10 @@
 assert = require 'assert'
-http   = require 'http'
 vows   = require 'vows'
 fetch  = require './lib/fetch.js'
 copy   = require './lib/copy.js'
 c      = require '../lib/controller.js'
 
-server = http
-	.createServer(c.handler)
-	.listen process.env.CRIXALIS_PORT
+c.start 'http', process.env.CRIXALIS_PORT
 
 c.router
 	url: '/set'

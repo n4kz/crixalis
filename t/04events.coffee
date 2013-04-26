@@ -1,6 +1,5 @@
 assert   = require 'assert'
 vows     = require 'vows'
-http     = require 'http'
 copy     = require './lib/copy.js'
 fetch    = require './lib/fetch.js'
 Crixalis = require '../lib/controller.js'
@@ -77,9 +76,7 @@ hc = ->
 	assert Array.isArray @events, 'events array not exists'
 	@events.push 'compression'
 
-server = http
-	.createServer(Crixalis.handler)
-	.listen process.env.CRIXALIS_PORT
+Crixalis.start 'http', process.env.CRIXALIS_PORT
 
 vows
 	.describe('events')

@@ -25,7 +25,7 @@ ee     = require('events').EventEmitter
 				assert.equal c.body, ''
 
 			methods: ->
-				for method in 'router sendHeaders plugin select render error redirect cookie burrow noop define'.split(' ')
+				for method in 'router sendHeaders plugin select render error redirect cookie burrow noop define start'.split(' ')
 					assert.isFunction c[method]
 
 			private: ->

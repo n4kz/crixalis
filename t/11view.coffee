@@ -31,10 +31,7 @@ topic = (options) ->
 
 	return options.tests
 
-
-(require 'http')
-	.createServer(c.handler)
-	.listen process.env.CRIXALIS_PORT
+c.start 'http', process.env.CRIXALIS_PORT
 
 (require 'vows')
 	.describe('params')
