@@ -29,12 +29,8 @@ Crixalis
 		this.stash.json = {
 			message: 'Hello, World!'
 		};
-	});
-
-require('http')
-	.createServer(Crixalis.handler)
-	.listen(8080);
-
+	})
+	.start('http', 8080);
 ```
 
 # Documentation
@@ -50,6 +46,7 @@ You can generate docs yourself for offline browsing using `make docs` command.
 - `jade`        Use [jade](http://jade-lang.com) template engine
 - `coffee`      Compile [coffee](http://coffeescript.org) for frontend on the fly
 - `less`        Compile [less](http://lesscss.org) for frontend on the fly
+- `request`     Thin wrapper around http.request and https.request
 
 # Copyright and License
 
