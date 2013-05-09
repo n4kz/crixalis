@@ -29,8 +29,9 @@ Crixalis
 		this.stash.json = {
 			message: 'Hello, World!'
 		};
-	})
-	.start('http', 8080);
+	});
+
+Crixalis.start('http', 8080);
 ```
 
 # Documentation
