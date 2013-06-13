@@ -5,7 +5,7 @@ test: compile
 	CRIXALIS_PORT=$(PORT) vows --tap -i t/*.js
 
 compile:
-	coffee --lint --compile t/lib/*.coffee t/*.coffee
+	coffee --compile t/lib/*.coffee t/*.coffee
 
 docs:
 	yuidoc
