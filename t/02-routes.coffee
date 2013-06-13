@@ -437,7 +437,7 @@ vows
 				route = new Route({}).set
 					pattern: /\/test\/(123|456)\/ok/
 					capture:
-						'$1' : 'number'
+						'$1': 'number'
 
 				context =
 					url: '/test/123/ok'
@@ -459,7 +459,7 @@ vows
 				context =
 					url: '/test/456/ok'
 
-				assert.equal route.set('capture', { '$1' : 'test' }), route
+				assert.equal route.set('capture', { '$1': 'test' }), route
 				assert route.match(context)
 				assert.equal context.params.test, '456'
 				assert.equal context.params.$1, '456'

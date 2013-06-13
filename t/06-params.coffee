@@ -102,7 +102,7 @@ vows
 					params         = copy topic
 					params.path    = '/post?p1=3&p2=1&p3=2'
 					params.method  = 'POST'
-					params.headers = 'content-type' : 'application/x-www-form-urlencoded'
+					params.headers = 'content-type': 'application/x-www-form-urlencoded'
 
 					fetch params, @callback
 					undefined
@@ -117,7 +117,7 @@ vows
 					params.path    = '/post'
 					params.method  = 'POST'
 					params.data    = 'p1=3&p2=1&p3=2'
-					params.headers = 'content-type' : 'application/x-www-form-urlencoded'
+					params.headers = 'content-type': 'application/x-www-form-urlencoded'
 
 					fetch params, @callback
 					undefined
@@ -132,7 +132,7 @@ vows
 					params.path    = '/post?p1=7&p2=9&p3=12'
 					params.method  = 'POST'
 					params.data    = 'p1=3;p2=1&p3=2'
-					params.headers = 'content-type' : 'application/x-www-form-urlencoded'
+					params.headers = 'content-type': 'application/x-www-form-urlencoded'
 
 					fetch params, @callback
 					undefined
@@ -146,7 +146,7 @@ vows
 					params         = copy topic
 					params.path    = '/post4?p1=7&p2=9&p3=12'
 					params.method  = 'POST'
-					params.headers = 'content-type' : 'application/x-www-form-urlencoded'
+					params.headers = 'content-type': 'application/x-www-form-urlencoded'
 					params.data    = 'p1=3+5&p3=2%2B9'
 
 					fetch params, @callback
@@ -162,7 +162,7 @@ vows
 					params         = copy topic
 					params.path    = '/nopost'
 					params.method  = 'POST'
-					params.headers = 'content-type' : 'application/x-www-form-urlencoded'
+					params.headers = 'content-type': 'application/x-www-form-urlencoded'
 					params.data    = 'p1='
 
 					remains = 1 << 20
@@ -182,7 +182,7 @@ vows
 					params         = copy topic
 					params.path    = '/nopost'
 					params.method  = 'POST'
-					params.headers = 'content-type' : 'text/plain'
+					params.headers = 'content-type': 'text/plain'
 					params.data    = 'text'
 
 					fetch params, @callback
@@ -212,7 +212,7 @@ vows
 					params         = copy topic
 					params.path    = '/json'
 					params.method  = 'POST'
-					params.headers = 'content-type' : 'application/json'
+					params.headers = 'content-type': 'application/json'
 					params.data    = '{"text": "mytext"}'
 
 					fetch params, @callback
@@ -228,7 +228,7 @@ vows
 					params         = copy topic
 					params.path    = '/nopost'
 					params.method  = 'POST'
-					params.headers = 'content-type' : 'application/json'
+					params.headers = 'content-type': 'application/json'
 					params.data    = '{"text": mytext}'
 
 					fetch params, @callback

@@ -8,9 +8,9 @@ c.plugin 'shortcuts', ['put', 'get', 'post']
 dumper = ->
 	@view = 'json'
 	@stash.json =
-		code   : @code or 200
-		method : @method
-		url    : @url
+		code: @code or 200
+		method: @method
+		url: @url
 
 c.on 'default', ->
 	@code = 404
@@ -48,9 +48,9 @@ request = (options) ->
 						.to(dumper)
 
 			result: checker
-				code   : 200
-				method : 'GET'
-				url    : '/via/A'
+				code: 200
+				method: 'GET'
+				url: '/via/A'
 
 		'via#post':
 			topic: request
@@ -63,9 +63,9 @@ request = (options) ->
 						.to(dumper)
 
 			result: checker
-				code   : 200
-				method : 'POST'
-				url    : '/via/A'
+				code: 200
+				method: 'POST'
+				url: '/via/A'
 
 		'via#put':
 			topic: request
@@ -75,9 +75,9 @@ request = (options) ->
 					1
 
 			result: checker
-				code   : 404
-				method : 'PUT'
-				url    : '/via/A'
+				code: 404
+				method: 'PUT'
+				url: '/via/A'
 
 		'via#get+post':
 			topic: request
@@ -90,9 +90,9 @@ request = (options) ->
 						.to(dumper)
 
 			result: checker
-				code   : 200
-				method : 'GET'
-				url    : '/via/B'
+				code: 200
+				method: 'GET'
+				url: '/via/B'
 
 		'via#error':
 			topic: 'error'
@@ -139,9 +139,9 @@ request = (options) ->
 							.to(dumper)
 
 				result: checker
-					code   : 200
-					method : 'GET'
-					url    : '/methods/C'
+					code: 200
+					method: 'GET'
+					url: '/methods/C'
 
 			path:
 				topic: request
@@ -153,9 +153,9 @@ request = (options) ->
 							.to(dumper)
 
 				result: checker
-					code   : 200
-					method : 'GET'
-					url    : '/methods/D'
+					code: 200
+					method: 'GET'
+					url: '/methods/D'
 
 			full:
 				topic: request
@@ -166,8 +166,8 @@ request = (options) ->
 							.get('/methods/E', dumper)
 
 				result: checker
-					code   : 200
-					method : 'GET'
-					url    : '/methods/E'
+					code: 200
+					method: 'GET'
+					url: '/methods/E'
 
 	.export module
