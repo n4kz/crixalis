@@ -6,9 +6,6 @@ qs     = require('querystring').stringify
 port = process.env.CRIXALIS_PORT
 parse = JSON.parse
 
-c.on 'auto', ->
-	@select()
-
 c.view = 'json'
 c.plugin('request')
 c.router('/').to ->
