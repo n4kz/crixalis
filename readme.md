@@ -5,7 +5,7 @@ Lightweight web framework for node.js
 # Features
 
 - Small, fully documented and easily extendable core
-- Advanced routing system (content type, method, host) with regexp support
+- Advanced routing system (content type, method, host) with regexp support and placeholders
 - Compression support (gzip, deflate)
 - Static file serving support
 
@@ -18,20 +18,30 @@ General usage
 var Crixalis = require('crixalis');
 
 Crixalis
-	.router({
-		methods: ['GET', 'HEAD']
-	})
-	.from(/^\/$/).to(function () {
-		this.redirect('/hello');
-	})
-	.from('/hello').to(function () {
+
+	/* Load plugin */
+	.plugin('shortcuts')
+
+	/* Get router object */
+	.router()
+
+	/* Add route with placeholder */
+	.get('/hello/:name', function () {
 		this.view = 'json';
 		this.stash.json = {
-			message: 'Hello, World!'
+			message: ['Hello, ', '!'].join(this.params.name)
 		};
 	});
 
-Crixalis.start('http', 8080);
+Crixalis
+
+	/* Override default event handler */
+	.on('default', function () {
+		this.redirect('/hello/World');
+	})
+
+	/* Start server */
+	.start('http', 8080);
 ```
 
 # Documentation
@@ -48,6 +58,7 @@ You can generate docs yourself for offline browsing using `make docs` command.
 - `coffee`      Compile [coffee](http://coffeescript.org) for frontend on the fly
 - `less`        Compile [less](http://lesscss.org) for frontend on the fly
 - `request`     Thin wrapper around http.request and https.request
+- `shortcuts`   Route declaration helpers, `.get()`, `.post()`, etc.
 
 # Copyright and License
 
