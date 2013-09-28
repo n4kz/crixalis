@@ -3,7 +3,7 @@
 	"version": "0.4.1",
 	"description": "Lightweight web framework",
 	"main": "lib/controller.js",
-	"license": "LGPLv3",
+	"license": "LGPL-3.0",
 	"keywords": ["framework", "rest", "web", "server", "http", "static"],
 	"author": {
 		"name": "Alexander Nazarov",
