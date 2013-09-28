@@ -3,7 +3,7 @@ fetch  = require './lib/fetch.js'
 c      = require '../lib/controller.js'
 
 port = process.env.CRIXALIS_PORT
-c.plugin 'shortcuts', ['put', 'get', 'post']
+c.plugin 'shortcuts', ['put', 'get', 'post', 'any']
 
 dumper = ->
 	@view = 'json'
@@ -119,6 +119,9 @@ request = (options) ->
 			put: (route) ->
 				assert.isFunction route.put
 
+			any: (route) ->
+				assert.isFunction route.any
+
 			undefined: (route) ->
 				assert.isUndefined route.head
 				assert.isUndefined route.options
@@ -169,5 +172,38 @@ request = (options) ->
 					code: 200
 					method: 'GET'
 					url: '/methods/E'
+
+		'methods#any':
+			topic: 'any'
+
+			simple:
+				topic: request
+					path: '/methods/F'
+					method: 'GET'
+					before: ->
+						c.router()
+							.any('/methods/F', dumper)
+							.to(dumper)
+
+				result: checker
+					code: 200
+					method: 'GET'
+					url: '/methods/F'
+
+			override:
+				topic: request
+					path: '/methods/G'
+					method: 'PUT'
+					before: ->
+						c.router()
+							.from('/methods/G')
+							.via('GET', 'HEAD')
+							.any()
+							.to(dumper)
+
+				result: checker
+					code: 200
+					method: 'PUT'
+					url: '/methods/G'
 
 	.export module
