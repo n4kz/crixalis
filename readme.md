@@ -52,12 +52,15 @@ You can generate docs yourself for offline browsing using `make docs` command.
 
 # Plugins
 
+Available core plugins
+
 - `static`      Serve static files
 - `compression` Compress response using `gzip` or `deflate` compression (also works with `static` plugin)
 - `jade`        Use [jade](http://jade-lang.com) template engine
 - `coffee`      Compile [coffee](http://coffeescript.org) for frontend on the fly
 - `less`        Compile [less](http://lesscss.org) for frontend on the fly
 - `request`     Thin wrapper around http.request and https.request
+- `access`      Log requests to console
 - `shortcuts`   Route declaration helpers, `.get()`, `.post()`, etc.
 
 # Copyright and License
