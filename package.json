@@ -9,6 +9,9 @@
 		"name": "Alexander Nazarov",
 		"email": "n4kz@n4kz.com"
 	},
+	"bin": {
+		"crixalis": "bin/crixalis"
+	},
 	"devDependencies": {
 		"vows": ">=0.6.0",
 		"coffee-script": ">=1.6.0",
@@ -22,7 +25,7 @@
 		"name": "Crixalis",
 		"description": "Lightweight web framework",
 		"url": "https://github.com/n4kz/crixalis",
-		"version": "0.4.1",
+		"version": "0.4.2",
 		"linkNatives": "true",
 		"options": {
 			"outdir": "doc",
@@ -31,6 +34,7 @@
 	},
 	"dependencies": {
 		"mime": "*",
+		"optimist": "*",
 		"sprintf": "*"
 	},
 	"engines": {

@@ -1,0 +1,48 @@
+#!/usr/bin/env node
+'use strict';
+
+var Crixalis = require('crixalis'),
+	optimist = require('optimist'),
+	system   = require('os'),
+	argv     = optimist
+		.boolean(['help', 'version'])
+		.default('port', process.env.CRIXALIS_PORT || 8080)
+		.default('path', process.cwd())
+		.default('temp', system.tmpdir())
+		.usage([
+			'Usage:',
+			'    crixalis [--port <number>] [--path <path>] [--temp <path>]',
+			'    crixalis --version',
+			'    crixalis --help'
+		].join('\n'))
+		.describe({
+			port    : 'Use specified port',
+			temp    : 'Directory for temporary files',
+			path    : 'Serve static files from path',
+			help    : 'Show help and exit',
+			version : 'Show version and exit'
+		})
+		.argv;
+
+if (argv.help) {
+	optimist.showHelp();
+	process.exit(1);
+}
+
+if (argv.version) {
+	console.log(require('../package').version);
+	process.exit();
+}
+
+Crixalis
+	.plugin('static')
+	.plugin('access')
+	.plugin('shortcuts')
+	.plugin('compression');
+
+Crixalis.staticPath = argv.path;
+Crixalis.cachePath  = argv.temp;
+
+Crixalis.start('http', argv.port);
+
+/* vim: set ft=javascript : */
