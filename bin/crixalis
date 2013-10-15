@@ -4,6 +4,7 @@
 var Crixalis = require('crixalis'),
 	optimist = require('optimist'),
 	system   = require('os'),
+	resolve  = require('path').resolve,
 	argv     = optimist
 		.boolean(['help', 'version'])
 		.default('port', process.env.CRIXALIS_PORT || 8080)
@@ -40,8 +41,23 @@ Crixalis
 	.plugin('shortcuts')
 	.plugin('compression');
 
-Crixalis.staticPath = argv.path;
-Crixalis.cachePath  = argv.temp;
+Crixalis.staticPath = resolve(process.cwd(), argv.path);
+Crixalis.cachePath  = resolve(process.cwd(), argv.temp);
+
+Crixalis.router()
+	.set({
+		pattern: /.*/,
+		methods: ['GET', 'HEAD']
+	}).to(function () {
+		var path = resolve(this.staticPath + this.url + '/index.html');
+
+		if (!path.indexOf(this.staticPath)) {
+			this.async = true;
+			this.serve(path);
+		} else {
+			this.emit('default');
+		}
+	});
 
 Crixalis.start('http', argv.port);
 
