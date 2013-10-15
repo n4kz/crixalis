@@ -1,20 +1,19 @@
 assert = require 'assert'
-vows   = require 'vows'
 c      = require '../lib/controller.js'
-Burrow = require '../lib/burrow.js'
+Chain  = require '../lib/chain.js'
 
-vows
-	.describe('burrow')
+(require 'vows')
+	.describe('chain')
 	.addBatch
 		constructor:
-			topic: new Burrow()
+			topic: new Chain()
 
 			object: (b) ->
-				assert b          instanceof Burrow
-				assert c.burrow() instanceof Burrow
+				assert b         instanceof Chain
+				assert c.chain() instanceof Chain
 
-				assert b          isnt c.burrow()
-				assert c.burrow() isnt c.burrow()
+				assert b         isnt c.chain()
+				assert c.chain() isnt c.chain()
 
 			properties: (b) ->
 				assert b.lock
@@ -27,29 +26,29 @@ vows
 
 				assert b.error          is null
 				assert typeof b.forward is 'function'
-				assert typeof b.tunnel  is 'function'
+				assert typeof b.append  is 'function'
 				assert typeof b.clean   is 'function'
 
 			simple: (b) ->
 				cx =
 					counter: 0
 
-				b.tunnel context, cx, [cx]
+				b.append context, cx, [cx]
 				assert b.queue.length is 1
 				b.forward()
 				assert cx.counter is 1
 				assert not Object.keys(b).length
 
 		chain:
-			topic: new Burrow()
+			topic: new Chain()
 
 			flow: (b) ->
 				b.counter = 0
 
-				b.tunnel inc, b
-				b.tunnel inc, b
-				b.tunnel inc, b
-				b.tunnel((->
+				b.append inc, b
+				b.append inc, b
+				b.append inc, b
+				b.append((->
 					assert @results.length is 3
 					assert @counter is 3
 					assert @results.pop() is 3
@@ -62,7 +61,7 @@ vows
 				assert not Object.keys(b).length
 
 		error:
-			topic: new Burrow()
+			topic: new Chain()
 
 			flow: (b) ->
 				b.counter = 0
@@ -73,13 +72,13 @@ vows
 					assert @results.pop() is 2
 					assert error is true
 
-				b.tunnel inc, b
-				b.tunnel inc, b
+				b.append inc, b
+				b.append inc, b
 
-				b.tunnel (next) ->
+				b.append (next) ->
 					next(true)
 
-				b.tunnel ->
+				b.append ->
 					assert false
 
 				b.forward()
@@ -88,15 +87,15 @@ vows
 				assert not Object.keys(b).length
 
 		nofwd:
-			topic: new Burrow()
+			topic: new Chain()
 
 			flow: (b) ->
-				b.tunnel((->
+				b.append((->
 					@forward()
 				), b)
-				b.tunnel (next) ->
+				b.append (next) ->
 					next()
-				b.tunnel ->
+				b.append ->
 
 				b.forward()
 
