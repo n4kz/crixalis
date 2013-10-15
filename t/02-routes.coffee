@@ -433,30 +433,42 @@ vows
 				assert not route.match { method: 'HEAD' }
 				assert not route.match { host: 'localhost' }
 
-			'Route.match(#pattern)': ->
+			'Route.match(#pattern|simple)': ->
+				route = new Route({}).set
+					pattern: /\/test\/123|456\/ok/
+
+				context1 = url: '/test/123/ok'
+				context2 = url: '/test/761/ok'
+				context3 = url: '/test'
+
+				assert  route.match(context1)
+				assert !route.match(context2)
+				assert !route.match(context3)
+
+			'Route.match(#pattern|capture)': ->
 				route = new Route({}).set
 					pattern: /\/test\/(123|456)\/ok/
-					capture:
-						'$1': 'number'
+					capture: '$1': 'number'
 
 				context =
+					params: {}
 					url: '/test/123/ok'
 
-				assert route.match { url: '/test/123/ok' }
-				assert route.match { url: '/test/456/ok' }
-				assert route.match { url: '/test/456/ok', method: 'GET' }
-				assert not route.match {}
-				assert not route.match { hostname: 'localhost' }
-				assert not route.match { url: '/test/13/ok' }
-				assert not route.match { url: 'test/456/ok' }
+				assert route.match { url: '/test/123/ok', params: {} }
+				assert route.match { url: '/test/456/ok', params: {} }
+				assert route.match { url: '/test/456/ok', method: 'GET', params: {} }
+				assert not route.match { params: {} }
+				assert not route.match { hostname: 'localhost', params: {} }
+				assert not route.match { url: '/test/13/ok', params: {} }
+				assert not route.match { url: 'test/456/ok', params: {} }
 
 				assert route.match(context)
-				assert.equal typeof context.params, 'object'
 				assert.equal context.params.number, '123'
 				assert.equal context.params.$1, '123'
 				assert not context.params.$2
 
 				context =
+					params: {}
 					url: '/test/456/ok'
 
 				assert.equal route.set('capture', { '$1': 'test' }), route

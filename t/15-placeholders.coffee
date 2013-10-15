@@ -22,6 +22,7 @@ parts = ['alpha', 'bravo4_03', '_-_5690_i-', '$^', '(...', '+-*[#]']
 
 				for item in parts
 					context =
+						params: {}
 						url: "/#{item}/list"
 
 					assert route.match context
@@ -34,6 +35,7 @@ parts = ['alpha', 'bravo4_03', '_-_5690_i-', '$^', '(...', '+-*[#]']
 				for item in parts
 					for action in parts
 						context =
+							params: {}
 							url: "/#{item}/#{action}"
 
 						assert route.match context
