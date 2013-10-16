@@ -49,11 +49,15 @@ Crixalis.router()
 		pattern: /.*/,
 		methods: ['GET', 'HEAD']
 	}).to(function () {
-		var path = resolve(this.staticPath + this.url + '/index.html');
+		var path = resolve(this.staticPath + this.url + '/index.html'),
+			that = this;
 
 		if (!path.indexOf(this.staticPath)) {
 			this.async = true;
-			this.serve(path);
+			this.serve(path, function () {
+				that.emit('default');
+				that.render();
+			});
 		} else {
 			this.emit('default');
 		}
