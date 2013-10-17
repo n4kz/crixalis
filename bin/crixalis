@@ -38,7 +38,6 @@ if (argv.version) {
 Crixalis
 	.plugin('static')
 	.plugin('access')
-	.plugin('shortcuts')
 	.plugin('compression');
 
 /* Load less plugin if available */
