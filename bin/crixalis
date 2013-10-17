@@ -27,7 +27,7 @@ var Crixalis = require('crixalis'),
 
 if (argv.help) {
 	optimist.showHelp();
-	process.exit(1);
+	process.exit();
 }
 
 if (argv.version) {
@@ -40,6 +40,20 @@ Crixalis
 	.plugin('access')
 	.plugin('shortcuts')
 	.plugin('compression');
+
+/* Load less plugin if available */
+try {
+	require('less');
+	Crixalis.plugin('less');
+} catch (error) {
+}
+
+/* Load coffee-script plugin if available */
+try {
+	require('coffee-script');
+	Crixalis.plugin('coffee');
+} catch (error) {
+}
 
 Crixalis.staticPath = resolve(process.cwd(), argv.path);
 Crixalis.cachePath  = resolve(process.cwd(), argv.temp);
