@@ -4,6 +4,8 @@ copy   = require './lib/copy.js'
 c      = require '../lib/controller.js'
 today  = (new Date()).toUTCString().slice(0, 16)
 
+status = require('http').STATUS_CODES
+
 c.router
 	methods: ['GET']
 
@@ -124,12 +126,12 @@ c.start 'http', process.env.CRIXALIS_PORT
 						assert.equal  response.statusCode, 302
 
 					headers: (error, response) ->
-						assert.equal   response.headers['content-type'],   undefined
-						assert.equal   response.headers['content-length'], undefined
+						assert.equal   response.headers['content-type'],   'text/html; charset=utf-8'
+						assert.equal   response.headers['content-length'], Buffer.byteLength(status[302])
 						assert.equal   response.headers['location'],       'localhost'
 						assert.include response.headers['date'],           today
 
 					body: (error, response) ->
-						assert.equal response.body, ''
+						assert.equal response.body, status[302]
 
 	.export module
