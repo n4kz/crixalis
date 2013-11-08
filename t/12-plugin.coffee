@@ -9,7 +9,6 @@ plugins =
 		serve: 'function'
 		cachePath: 'string'
 		expires: 'object'
-		_symlinks: 'boolean'
 		_streamLimit: 'number'
 
 	compression:
