@@ -37,7 +37,8 @@ Chain  = require '../lib/chain.js'
 				assert b.queue.length is 1
 				b.forward()
 				assert cx.counter is 1
-				assert not Object.keys(b).length
+
+				assert.equal null, value for key, value of b
 
 		chain:
 			topic: new Chain()
@@ -58,7 +59,7 @@ Chain  = require '../lib/chain.js'
 				b.forward()
 
 			clean: (b) ->
-				assert not Object.keys(b).length
+				assert.equal null, value for key, value of b
 
 		error:
 			topic: new Chain()
@@ -84,7 +85,7 @@ Chain  = require '../lib/chain.js'
 				b.forward()
 
 			clean: (b) ->
-				assert not Object.keys(b).length
+				assert.equal null, value for key, value of b
 
 		nofwd:
 			topic: new Chain()
@@ -100,7 +101,7 @@ Chain  = require '../lib/chain.js'
 				b.forward()
 
 			clean: (b) ->
-				assert not Object.keys(b).length
+				assert.equal null, value for key, value of b
 
 	.export module
 
