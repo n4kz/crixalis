@@ -27,10 +27,35 @@ Crixalis
 
 	/* Add route with placeholder */
 	.get('/hello/:name', function () {
+		/* Set view for this response */
 		this.view = 'json';
+
+		/* Set data for view */
 		this.stash.json = {
 			message: ['Hello, ', '!'].join(this.params.name)
 		};
+	})
+
+	/* Add simple route */
+	.get('/info', function () {
+		var that = this;
+
+		/* Async response */
+		this.async = true;
+
+		require('fs').readFile('./package.json', function (error, result) {
+			/* Handle error */
+			if (error) {
+				that.error(500);
+				return;
+			}
+
+			/* Set response body */
+			that.body = result;
+
+			/* Send result */
+			that.render();
+		});
 	});
 
 Crixalis
@@ -40,7 +65,7 @@ Crixalis
 		this.redirect('/hello/World');
 	})
 
-	/* Start server */
+	/* Start server on port 8080 */
 	.start('http', 8080);
 ```
 
@@ -59,7 +84,7 @@ Available core plugins
 - `jade`        Use [jade](http://jade-lang.com) template engine
 - `coffee`      Compile [coffee](http://coffeescript.org) for frontend on the fly
 - `less`        Compile [less](http://lesscss.org) for frontend on the fly
-- `request`     Thin wrapper around http.request and https.request
+- `request`     Thin wrapper around `http.request` and `https.request`
 - `access`      Log requests to console
 - `shortcuts`   Route declaration helpers, `.get()`, `.post()`, etc.
 
