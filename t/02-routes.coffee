@@ -273,10 +273,6 @@ vows
 				assert route.pattern.test 'test'
 				assert not route.url
 
-				# Plain property
-				assert.equal route.set({ async: true }), route
-				assert route.async
-
 				# Objectified property
 				assert.equal route.set({ methods: 'GET' }), route
 				assert.equal typeof route.methods, 'object'
@@ -340,21 +336,16 @@ vows
 				assert not route.url
 				assert not route.pattern
 
-				route.set 'async', true
-				assert.equal route.unset('async'), route
-				assert not route.async
-
 			'Route.unset(#array)': ->
 				ok = false
 				route = new Route {}, 'test'
 
 				route.set 'url', 'test'
-				route.set { methods: ['GET', 'POST'], async: true }
-				assert.equal route.unset(['url', 'methods', 'pattern', 'async']), route
+				route.set methods: ['GET', 'POST']
+				assert.equal route.unset(['url', 'methods', 'pattern']), route
 				assert not route.url
 				assert not route.methods
 				assert not route.pattern
-				assert not route.async
 
 			'Route.unset(#null)': ->
 				ok = false
@@ -499,7 +490,6 @@ vows
 					url: 'test'
 					methods: ['GET', 'POST']
 					hosts: ['apple.com', 'microsoft.com']
-					async: true
 				copy = route.copy()
 
 				assert copy instanceof Route
@@ -508,7 +498,7 @@ vows
 				assert not copy.capture
 				assert not copy.pattern
 
-				for field in ['url', 'pattern', 'async', 'capture', 'types']
+				for field in ['url', 'pattern', 'capture', 'types']
 					assert.equal copy[field], route[field]
 
 				assert.deepEqual copy.methods, route.methods
@@ -521,7 +511,7 @@ vows
 				assert copy instanceof Route
 				assert.notEqual copy, route
 
-				for field in ['methods', 'hosts', 'types', 'async', 'url', 'pattern', 'capture']
+				for field in ['methods', 'hosts', 'types', 'url', 'pattern', 'capture']
 					assert.equal copy[field], route[field]
 					assert not copy[field]
 					assert not route[field]

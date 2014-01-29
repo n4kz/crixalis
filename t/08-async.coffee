@@ -9,29 +9,28 @@ c.start 'http', port
 
 c.router
 	url: '/json'
-	async: yes
 .to ->
+	@async = yes
 	@view = 'json'
 	@stash.json = body: 'html'
-	setTimeout @render.bind(this), 50
-	undefined
+	setTimeout @render.bind(@), 50
+	return
 .set
 	url: '/html'
 .to ->
+	@async = yes
 	@body = 'html'
-	setTimeout @render.bind(this), 30
-	undefined
+	setTimeout @render.bind(@), 30
+	return
 .set
-	async: false
 	url: '/callback'
 .to ->
 	@body = 'callback'
 	@async = yes
-	setTimeout @render.bind(this), 40
-	undefined
+	setTimeout @render.bind(@), 40
+	return
 .set
 	url: '/skip'
-.unset('async')
 .to ->
 	no
 
