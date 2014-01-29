@@ -1,4 +1,4 @@
-# Port for test server
+# Basic port for tests
 PORT=30000
 
 test: compile

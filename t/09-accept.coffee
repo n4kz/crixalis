@@ -3,8 +3,9 @@ vows   = require 'vows'
 fetch  = require './lib/fetch.js'
 copy   = require './lib/copy.js'
 c      = require '../lib/controller.js'
+port   = process.env.CRIXALIS_PORT + 9
 
-c.start 'http', process.env.CRIXALIS_PORT
+c.start 'http', port
 
 c.router('/')
 	.to ->
@@ -34,7 +35,7 @@ vows
 		simple:
 			topic:
 				host: '127.0.0.1'
-				port: process.env.CRIXALIS_PORT
+				port: port
 				path: '/?types=0'
 
 			empty:
@@ -89,7 +90,7 @@ vows
 		priority:
 			topic:
 				host: '127.0.0.1'
-				port: process.env.CRIXALIS_PORT
+				port: port
 				path: '/?types=1'
 
 			float:
@@ -145,7 +146,7 @@ vows
 		type:
 			topic:
 				host: '127.0.0.1'
-				port: process.env.CRIXALIS_PORT
+				port: port
 				path: '/_?types=1'
 
 			first:
@@ -199,7 +200,7 @@ vows
 		subtype:
 			topic:
 				host: '127.0.0.1'
-				port: process.env.CRIXALIS_PORT
+				port: port
 				path: '/_?types=1'
 
 			first:

@@ -3,8 +3,9 @@ vows   = require 'vows'
 fetch  = require './lib/fetch.js'
 copy   = require './lib/copy.js'
 c      = require '../lib/controller.js'
+port   = process.env.CRIXALIS_PORT + 7
 
-c.start 'http', process.env.CRIXALIS_PORT
+c.start 'http', port
 
 c.router
 	url: '/set'
@@ -57,7 +58,7 @@ vows
 		cookie:
 			topic:
 				host: '127.0.0.1'
-				port: process.env.CRIXALIS_PORT
+				port: port
 				path: '/set'
 
 			set:

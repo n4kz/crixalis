@@ -3,6 +3,7 @@ fetch  = require './lib/fetch.js'
 copy   = require './lib/copy.js'
 c      = require '../lib/controller.js'
 today  = (new Date()).toUTCString().slice(0, 16)
+port   = process.env.CRIXALIS_PORT + 11
 
 status = require('http').STATUS_CODES
 
@@ -33,7 +34,7 @@ topic = (options) ->
 
 	return options.tests
 
-c.start 'http', process.env.CRIXALIS_PORT
+c.start 'http', port
 
 (require 'vows')
 	.describe('params')
@@ -41,7 +42,7 @@ c.start 'http', process.env.CRIXALIS_PORT
 		response:
 			topic:
 				host: '127.0.0.1'
-				port: process.env.CRIXALIS_PORT
+				port: port
 				path: '/'
 
 			null: topic
