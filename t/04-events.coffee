@@ -3,7 +3,7 @@ vows     = require 'vows'
 copy     = require './lib/copy.js'
 fetch    = require './lib/fetch.js'
 Crixalis = require '../lib/controller.js'
-port     = process.env.CRIXALIS_PORT + 4
+port     = +process.env.CRIXALIS_PORT + 4
 
 hmn = ->
 	assert Array.isArray @events, 'event array not exists'

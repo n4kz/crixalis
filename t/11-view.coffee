@@ -3,7 +3,7 @@ fetch  = require './lib/fetch.js'
 copy   = require './lib/copy.js'
 c      = require '../lib/controller.js'
 today  = (new Date()).toUTCString().slice(0, 16)
-port   = process.env.CRIXALIS_PORT + 11
+port   = +process.env.CRIXALIS_PORT + 11
 
 status = require('http').STATUS_CODES
 

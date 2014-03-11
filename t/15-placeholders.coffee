@@ -2,7 +2,7 @@ assert = require 'assert'
 fetch  = require './lib/fetch.js'
 c      = require '../lib/controller.js'
 
-port = process.env.CRIXALIS_PORT + 15
+port = +process.env.CRIXALIS_PORT + 15
 
 c.start 'http', port
 

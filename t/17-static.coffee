@@ -1,7 +1,7 @@
 Crixalis = require '../lib/controller.js'
 assert   = require 'assert'
 fs       = require 'fs'
-port     = process.env.CRIXALIS_PORT + 17
+port     = +process.env.CRIXALIS_PORT + 17
 
 Crixalis
 	.plugin('static')

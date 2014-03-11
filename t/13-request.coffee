@@ -3,7 +3,7 @@ fetch  = require './lib/fetch.js'
 c      = require '../lib/controller.js'
 qs     = require('querystring').stringify
 
-port = process.env.CRIXALIS_PORT + 13
+port  = +process.env.CRIXALIS_PORT + 13
 parse = JSON.parse
 
 c.view = 'json'

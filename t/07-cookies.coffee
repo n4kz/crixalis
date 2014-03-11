@@ -3,7 +3,7 @@ vows   = require 'vows'
 fetch  = require './lib/fetch.js'
 copy   = require './lib/copy.js'
 c      = require '../lib/controller.js'
-port   = process.env.CRIXALIS_PORT + 7
+port   = +process.env.CRIXALIS_PORT + 7
 
 c.start 'http', port
 
