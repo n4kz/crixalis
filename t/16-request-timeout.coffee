@@ -50,7 +50,7 @@ Crixalis
 
 			error:  (error, result) -> assert.equal error, null
 			result: (error, result) ->
-				assert result?.body
-				assert.deepEqual JSON.parse(result.body), status: 'ok'
+				assert result?.message?.length
+				assert.deepEqual JSON.parse(result.message.toString()), status: 'ok'
 
 	.export(module)

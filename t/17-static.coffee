@@ -28,8 +28,8 @@ Crixalis
 			result: (error, result) -> assert.equal result.statusCode, 200
 
 			body: (error, result) ->
-				assert.equal Buffer.byteLength(result.body), fs.statSync(__filename).size
-				assert.equal result.body, fs.readFileSync(__filename)
+				assert.equal result.message.length, fs.statSync(__filename).size
+				assert.equal result.message.toString(), fs.readFileSync(__filename)
 
 			headers: (error, result) ->
 				stat = fs.statSync(__filename)
@@ -55,8 +55,8 @@ Crixalis
 			result: (error, result) -> assert.equal result.statusCode, 200
 
 			body: (error, result) ->
-				assert.equal Buffer.byteLength(result.body), fs.statSync(__filename).size
-				assert.equal result.body, fs.readFileSync(__filename)
+				assert.equal result.message.length, fs.statSync(__filename).size
+				assert.equal result.message.toString(), fs.readFileSync(__filename)
 
 			headers: (error, result) ->
 				stat = fs.statSync(__filename)
@@ -80,7 +80,7 @@ Crixalis
 
 			error:   (error, result) -> assert.equal error, null
 			result:  (error, result) -> assert.equal result.statusCode, 304
-			body:    (error, result) -> assert.equal result.body, ''
+			body:    (error, result) -> assert.equal result.message.toString(), ''
 			headers: (error, result) ->
 				stat = fs.statSync(__filename)
 

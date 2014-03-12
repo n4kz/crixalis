@@ -17,7 +17,7 @@ c.router('/').to ->
 	@request @params, (error, result) =>
 		@stash.json =
 			code: result.statusCode
-			body: result.body
+			body: result.message.toString()
 		@render()
 
 	return
@@ -60,7 +60,7 @@ request = (options) ->
 				result = parse response.body
 				data   = parse result.body
 
-				assert.equal       result.code,        200
+				assert.equal       result.code, 200
 				assert.equal       data.method, 'GET'
 				assert.deepEqual   data.params, magic: 1
 				assert.isUndefined data.headers['content-length']
