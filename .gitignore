@@ -4,3 +4,4 @@ t/lib/*.js
 t/*.js
 *.log
 *.swp
+tmp_*

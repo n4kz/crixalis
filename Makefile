@@ -11,6 +11,6 @@ docs:
 	yuidoc
 
 clean:
-	rm -f t/*.js t/lib/*.js
+	rm -rf t/*.js t/lib/*.js t/tmp_*
 
 all: test docs
