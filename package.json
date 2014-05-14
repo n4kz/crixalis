@@ -43,6 +43,6 @@
 	},
 	"homepage": "http://crixalis.n4kz.com",
 	"scripts": {
-		"test": "make test"
+		"test": "make clean test"
 	}
 }
