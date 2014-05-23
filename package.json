@@ -36,7 +36,8 @@
 		"mime": "*",
 		"optimist": "*",
 		"sprintf": "*",
-		"async-cache": "*"
+		"async-cache": "*",
+		"strftime": "*"
 	},
 	"engines": {
 		"node": ">=0.6.0"
