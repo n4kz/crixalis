@@ -23,6 +23,7 @@ ee     = require('events').EventEmitter
 				assert.equal c.view, 'html'
 				assert.equal c.code, 0
 				assert.equal c.body, ''
+				assert.equal c.logger, console
 
 			methods: ->
 				for method in 'router sendHeaders plugin select render error redirect cookie chain noop define start'.split(' ')
