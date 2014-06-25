@@ -27,6 +27,16 @@ plugins =
 
 	# processor is not listed here (is not a plugin but a plugin generator)
 
+try
+	require 'jade'
+catch error
+	delete plugins.jade
+
+try
+	require 'less'
+catch error
+	delete plugins.less
+
 plan = ->
 	result =
 		topic: null
