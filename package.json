@@ -13,7 +13,7 @@
 		"crixalis": "bin/crixalis"
 	},
 	"devDependencies": {
-		"vows": ">=0.6.0",
+		"vows": "^0.8.0",
 		"coffee-script": ">=1.6.0",
 		"yuidocjs": ">=0.3.30"
 	},

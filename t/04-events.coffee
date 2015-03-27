@@ -83,7 +83,7 @@ vows
 	.describe('events')
 	.addBatch
 		order:
-			topic: () ->
+			topic: ->
 				responses = {}
 				remains   = 0
 				params    =
@@ -91,11 +91,13 @@ vows
 					port: port
 
 				cb = (error, result) =>
-					assert not error,                      'got result'
-					assert.equal result.statusCode, 200,   'code 200'
+					assert not error,                    'got result'
+					assert.equal result.statusCode, 200, 'code 200'
 
 					unless --remains
-						@callback undefined, responses
+						@callback true, responses
+
+					return
 
 				# Load compression plugin
 				Crixalis.plugin 'compression'
@@ -121,10 +123,12 @@ vows
 					hs.call @
 					responses[@name] = @events
 
-				for path in '''
-					normal   default  error  compression  ecompression  dcompression
-					anormal adefault aerror acompression aecompression adcompression
-				'''.replace(/\n/, ' ').split ' '
+				endpoints = [
+					'normal',   'default',  'error',  'compression',  'ecompression',  'dcompression'
+					'anormal', 'adefault', 'aerror', 'acompression', 'aecompression', 'adcompression'
+				]
+
+				for path in endpoints
 					remains++
 					options = copy params
 					options.path = '/match/' + path
@@ -137,7 +141,7 @@ vows
 
 					fetch options, cb
 
-				undefined
+				return
 
 			normal: (error, responses) ->
 				events = responses.normal

@@ -70,7 +70,7 @@ vows
 				topic: (topic) ->
 					params = copy topic
 					fetch params, @callback
-					undefined
+					return
 
 				response: (error, response) ->
 					assert not error
@@ -81,7 +81,7 @@ vows
 					params = copy topic
 					params.path = '/get?p1=1;p2=2;p3=3'
 					fetch params, @callback
-					undefined
+					return
 
 				response: (error, response) ->
 					assert not error
@@ -92,7 +92,7 @@ vows
 					params = copy topic
 					params.path = '/get?p1=1&p2=2&p3=3'
 					fetch params, @callback
-					undefined
+					return
 
 				response: (error, response) ->
 					assert not error
@@ -106,7 +106,7 @@ vows
 					params.headers = 'content-type': 'application/x-www-form-urlencoded'
 
 					fetch params, @callback
-					undefined
+					return
 
 				response: (error, response) ->
 					assert not error
@@ -121,7 +121,7 @@ vows
 					params.headers = 'content-type': 'application/x-www-form-urlencoded'
 
 					fetch params, @callback
-					undefined
+					return
 
 				response: (error, response) ->
 					assert not error
@@ -136,7 +136,7 @@ vows
 					params.headers = 'content-type': 'application/x-www-form-urlencoded'
 
 					fetch params, @callback
-					undefined
+					return
 
 				response: (error, response) ->
 					assert not error
@@ -151,7 +151,7 @@ vows
 					params.data    = 'p1=3+5&p3=2%2B9'
 
 					fetch params, @callback
-					undefined
+					return
 
 				response: (error, response) ->
 					assert not error
@@ -172,7 +172,7 @@ vows
 						params.data += 'F'
 
 					fetch params, @callback
-					undefined
+					return
 
 				response: (error, response) ->
 					assert not error
@@ -187,7 +187,7 @@ vows
 					params.data    = 'text'
 
 					fetch params, @callback
-					undefined
+					return
 
 				response: (error, response) ->
 					assert not error
@@ -201,7 +201,7 @@ vows
 					params.data    = 'text'
 
 					fetch params, @callback
-					undefined
+					return
 
 				response: (error, response) ->
 					assert not error
@@ -217,7 +217,7 @@ vows
 					params.data    = '{"text": "mytext"}'
 
 					fetch params, @callback
-					undefined
+					return
 
 				response: (error, response) ->
 					assert not error
@@ -233,7 +233,7 @@ vows
 					params.data    = '{"text": mytext}'
 
 					fetch params, @callback
-					undefined
+					return
 
 				response: (error, response) ->
 					assert not error
