@@ -102,7 +102,7 @@ Crixalis comes with simple script for serving static files
 
 # Copyright and License
 
-Copyright 2012-2014 Alexander Nazarov. All rights reserved.
+Copyright 2012-2015 Alexander Nazarov. All rights reserved.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
