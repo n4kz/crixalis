@@ -1,10 +1,11 @@
-assert = require 'assert'
-fetch  = require './lib/fetch.js'
-c      = require '../lib/controller.js'
+assert   = require 'assert'
+fetch    = require './lib/fetch.js'
+Crixalis = require '../lib/controller.js'
 
 port = +process.env.CRIXALIS_PORT + 15
 
-c.start 'http', port
+Crixalis.start 'http', port
+	.unref()
 
 dummy = ->
 
@@ -17,7 +18,7 @@ parts = ['alpha', 'bravo4_03', '_-_5690_i-', '$^', '(...', '+-*[#]']
 			topic: 'placeholders'
 
 			one: () ->
-				(route = c.router().from('/:item/list'))
+				(route = Crixalis.router().from('/:item/list'))
 					.to(dummy)
 
 				for item in parts
@@ -29,7 +30,7 @@ parts = ['alpha', 'bravo4_03', '_-_5690_i-', '$^', '(...', '+-*[#]']
 					assert.equal context.params.item, item
 
 			two: (topic) ->
-				(route = c.router().from('/:item/:action'))
+				(route = Crixalis.router().from('/:item/:action'))
 					.to(dummy)
 
 				for item in parts
@@ -43,7 +44,7 @@ parts = ['alpha', 'bravo4_03', '_-_5690_i-', '$^', '(...', '+-*[#]']
 						assert.equal context.params.action, action
 
 			negative: (topic) ->
-				(route = c.router().from('/:item'))
+				(route = Crixalis.router().from('/:item'))
 					.to(dummy)
 
 				for item in parts

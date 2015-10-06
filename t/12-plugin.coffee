@@ -1,5 +1,5 @@
-assert = require 'assert'
-c      = require '../lib/controller.js'
+assert   = require 'assert'
+Crixalis = require '../lib/controller.js'
 
 plugins =
 	request:
@@ -45,12 +45,12 @@ plan = ->
 		((plugin, exports) ->
 			result[plugin] = ->
 				for own property of exports
-					assert.isUndefined c[property]
+					assert.isUndefined Crixalis[property]
 
-				assert.equal c, c.plugin(plugin)
+				assert.equal Crixalis, Crixalis.plugin(plugin)
 
 				for own property of exports
-					assert.equal typeof c[property], exports[property]
+					assert.equal typeof Crixalis[property], exports[property]
 
 				return
 			return
@@ -67,27 +67,27 @@ plan = ->
 			topic: null
 
 			'path resolution': ->
-				assert.isUndefined c.plugin_1
-				assert.equal c, c.plugin(__dirname + '/lib/plugin')
-				assert.isFunction c.plugin_1
+				assert.isUndefined Crixalis.plugin_1
+				assert.equal Crixalis, Crixalis.plugin(__dirname + '/lib/plugin')
+				assert.isFunction Crixalis.plugin_1
 
 			'plugin options': ->
 				options =
 					test: 'property'
 
-				assert.isUndefined c.plugin_2
-				assert.equal c, c.plugin(__dirname + '/lib/plugin', options)
-				assert.isFunction c.plugin_2
-				assert.notEqual c.plugin_1, c.plugin_2
-				assert.notEqual c.plugin_1(), c.plugin_2()
-				assert.deepEqual options, c.plugin_2()
+				assert.isUndefined Crixalis.plugin_2
+				assert.equal Crixalis, Crixalis.plugin(__dirname + '/lib/plugin', options)
+				assert.isFunction Crixalis.plugin_2
+				assert.notEqual Crixalis.plugin_1, Crixalis.plugin_2
+				assert.notEqual Crixalis.plugin_1(), Crixalis.plugin_2()
+				assert.deepEqual options, Crixalis.plugin_2()
 
 			'loader error#not found': ->
 				assert.throws ->
-					c.plugin(__dirname + 'notexists')
+					Crixalis.plugin(__dirname + 'notexists')
 
 			'loader error#bad plugin': ->
 				assert.throws ->
-					c.plugin(__dirname + '/lib/module')
+					Crixalis.plugin(__dirname + '/lib/module')
 
 	.export module

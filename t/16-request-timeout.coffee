@@ -17,6 +17,7 @@ Crixalis.router('/').to ->
 Crixalis
 	.plugin('request')
 	.start('http', port)
+	.unref()
 
 (require 'vows')
 	.describe('request')

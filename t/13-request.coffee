@@ -1,14 +1,14 @@
-assert = require 'assert'
-fetch  = require './lib/fetch.js'
-c      = require '../lib/controller.js'
-qs     = require('querystring').stringify
+assert   = require 'assert'
+fetch    = require './lib/fetch.js'
+Crixalis = require '../lib/controller.js'
+qs       = require('querystring').stringify
 
 port  = +process.env.CRIXALIS_PORT + 13
 parse = JSON.parse
 
-c.view = 'json'
-c.plugin('request')
-c.router('/').to ->
+Crixalis.view = 'json'
+Crixalis.plugin('request')
+Crixalis.router('/').to ->
 	@async = yes
 
 	@params.data    = parse @params.data    if @params.data and @params.type isnt 'custom'
@@ -22,7 +22,7 @@ c.router('/').to ->
 
 	return
 
-c.router('/mirror').to ->
+Crixalis.router('/mirror').to ->
 	@stash.json =
 		method: @method
 		params: @params
@@ -31,7 +31,8 @@ c.router('/mirror').to ->
 
 	return
 
-c.start 'http', port
+Crixalis.start 'http', port
+	.unref()
 
 request = (options) ->
 	options.host ?= 'localhost'

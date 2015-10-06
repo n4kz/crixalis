@@ -1,13 +1,13 @@
-assert = require 'assert'
-fetch  = require './lib/fetch.js'
-copy   = require './lib/copy.js'
-c      = require '../lib/controller.js'
-today  = (new Date()).toUTCString().slice(0, 16)
-port   = +process.env.CRIXALIS_PORT + 11
+assert   = require 'assert'
+fetch    = require './lib/fetch.js'
+copy     = require './lib/copy.js'
+Crixalis = require '../lib/controller.js'
+today    = (new Date()).toUTCString().slice(0, 16)
+port     = +process.env.CRIXALIS_PORT + 11
 
 status = require('http').STATUS_CODES
 
-c.router
+Crixalis.router
 	methods: ['GET']
 
 .from('/')
@@ -34,7 +34,8 @@ topic = (options) ->
 
 	return options.tests
 
-c.start 'http', port
+Crixalis.start 'http', port
+	.unref()
 
 (require 'vows')
 	.describe('params')

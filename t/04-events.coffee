@@ -78,6 +78,7 @@ hc = ->
 	@events.push 'compression'
 
 Crixalis.start 'http', port
+	.unref()
 
 vows
 	.describe('events')
@@ -190,7 +191,6 @@ vows
 			adcompression: (error, responses) ->
 				events = responses.adcompression
 				assert.deepEqual events, 'auto default compression response destroy'.split ' '
-
 
 			# TODO: same for async
 

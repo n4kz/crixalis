@@ -1,19 +1,20 @@
-assert = require 'assert'
-vows   = require 'vows'
-fetch  = require './lib/fetch.js'
-copy   = require './lib/copy.js'
-c      = require '../lib/controller.js'
-port   = +process.env.CRIXALIS_PORT + 9
+assert   = require 'assert'
+vows     = require 'vows'
+fetch    = require './lib/fetch.js'
+copy     = require './lib/copy.js'
+Crixalis = require '../lib/controller.js'
+port     = +process.env.CRIXALIS_PORT + 9
 
-c.start 'http', port
+Crixalis.start 'http', port
+	.unref()
 
-c.router('/')
+Crixalis.router('/')
 	.to ->
 		assert Array.isArray @types
 		assert.equal @types.length, @params.types
 		@body = @types.join ':'
 
-c.router('/_')
+Crixalis.router('/_')
 	.set
 		types: ['text/javascript', 'application/javascript']
 	.to ->
@@ -21,7 +22,7 @@ c.router('/_')
 		assert.equal @types.length, @params.types
 		@body = @types.join '|'
 
-c.router('/_')
+Crixalis.router('/_')
 	.set
 		types: ['image/png', 'custom/type']
 	.to ->

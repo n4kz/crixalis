@@ -7,6 +7,7 @@ Crixalis
 	.plugin('static')
 	.plugin('request')
 	.start('http', port)
+	.unref()
 
 Crixalis
 	.staticPath = 't'

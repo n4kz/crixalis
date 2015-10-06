@@ -10,6 +10,7 @@ Crixalis
 	.plugin('request')
 	.plugin('shortcuts')
 	.start('http', port)
+	.unref()
 
 Crixalis.staticPath = 't'
 Crixalis.view = 'json'

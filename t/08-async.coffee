@@ -1,13 +1,14 @@
-assert = require 'assert'
-vows   = require 'vows'
-fetch  = require './lib/fetch.js'
-copy   = require './lib/copy.js'
-c      = require '../lib/controller.js'
-port   = +process.env.CRIXALIS_PORT + 8
+assert   = require 'assert'
+vows     = require 'vows'
+fetch    = require './lib/fetch.js'
+copy     = require './lib/copy.js'
+Crixalis = require '../lib/controller.js'
+port     = +process.env.CRIXALIS_PORT + 8
 
-c.start 'http', port
+Crixalis.start 'http', port
+	.unref()
 
-c.router
+Crixalis.router
 	url: '/json'
 .to ->
 	@async = yes
