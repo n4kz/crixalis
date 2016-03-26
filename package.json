@@ -12,38 +12,25 @@
 	"bin": {
 		"crixalis": "bin/crixalis"
 	},
-	"devDependencies": {
-		"vows": ">=0.8.0",
-		"coffee-script": ">=1.6.0",
-		"yuidocjs": ">=0.3.30"
-	},
 	"repository": {
 		"type": "git",
 		"url": "git://github.com/n4kz/crixalis.git"
 	},
-	"yuidoc": {
-		"name": "Crixalis",
-		"description": "Lightweight web framework",
-		"url": "https://github.com/n4kz/crixalis",
-		"version": "0.5.4",
-		"linkNatives": "true",
-		"options": {
-			"outdir": "doc",
-			"paths": "lib"
-		}
-	},
 	"dependencies": {
+		"async-cache": "*",
 		"mime": "*",
 		"optimist": "*",
 		"sprintf": "*",
-		"async-cache": "*",
 		"strftime": "*"
+	},
+	"devDependencies": {
+		"coffee-script": ">=1.6.0",
+		"vows": ">=0.8.0"
 	},
 	"engines": {
 		"node": ">=0.6.0"
 	},
-	"homepage": "http://crixalis.n4kz.com",
 	"scripts": {
-		"test": "make clean test"
+		"test": "make test"
 	}
 }
