@@ -31,7 +31,7 @@ if (argv.help) {
 }
 
 if (argv.version) {
-	console.log(require('../package').version);
+	console.log(Crixalis.version);
 	process.exit();
 }
 
@@ -66,10 +66,8 @@ Crixalis.router()
 			that = this;
 
 		if (!path.indexOf(this.staticPath)) {
-			this.async = true;
 			this.serve(path, function () {
 				that.emit('default');
-				that.render();
 			});
 		} else {
 			this.emit('default');

@@ -17,6 +17,8 @@ Crixalis.view = 'json'
 
 Crixalis.router().get '/', ->
 	@stash.json = Data
+
+	@render()
 	return
 
 (require 'vows')

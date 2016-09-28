@@ -14,6 +14,9 @@ Crixalis.router('/')
 		assert.equal @types.length, @params.types
 		@body = @types.join ':'
 
+		@render()
+		return
+
 Crixalis.router('/_')
 	.set
 		types: ['text/javascript', 'application/javascript']
@@ -22,6 +25,9 @@ Crixalis.router('/_')
 		assert.equal @types.length, @params.types
 		@body = @types.join '|'
 
+		@render()
+		return
+
 Crixalis.router('/_')
 	.set
 		types: ['image/png', 'custom/type']
@@ -29,6 +35,9 @@ Crixalis.router('/_')
 		assert Array.isArray @types
 		assert.equal @types.length, @params.types
 		@body = @types.join '%'
+
+		@render()
+		return
 
 vows
 	.describe('accept')

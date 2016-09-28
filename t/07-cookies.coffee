@@ -46,12 +46,18 @@ Crixalis.router
 			"fourth=753; expires=#{ time.toUTCString() }; httponly",
 			"expired=; expires=#{ new Date(0).toUTCString() }; httponly"
 		]
+
+	@render()
+	return
 .set
 	url: '/get'
 .to ->
 	assert.equal @cookies.test, 3124
 	assert.equal @cookies.foo, 'ok'
 	assert.equal Object.keys(@cookies).length, 2
+
+	@render()
+	return
 
 vows
 	.describe('cookies')

@@ -10,9 +10,10 @@ hmn = ->
 	@compression = no
 	@events.push 'main'
 
-	if @async
-		setTimeout =>
-			@render()
+	setTimeout =>
+		@render()
+
+	return
 
 hme = ->
 	assert Array.isArray @events, 'events array not exists'
@@ -20,26 +21,29 @@ hme = ->
 	@events.push 'main'
 	@error new Error 'test'
 
-	if @async
-		setTimeout =>
-			@render()
+	setTimeout =>
+		@render()
+
+	return
 
 hmec = ->
 	assert Array.isArray @events, 'events array not exists'
 	@events.push 'main'
 	@error new Error 'test'
 
-	if @async
-		setTimeout =>
-			@render()
+	setTimeout =>
+		@render()
+
+	return
 
 hmc = ->
 	assert Array.isArray @events, 'events array not exists'
 	@events.push 'main'
 
-	if @async
-		setTimeout =>
-			@render()
+	setTimeout =>
+		@render()
+
+	return
 
 ha = ->
 	assert not Array.isArray @events, 'events array exists'
@@ -48,10 +52,9 @@ ha = ->
 	@body        = @url.replace /^.*\//, ''
 	@name        = @body
 
-	if @headers['x-async']
-		@async = yes
-
 	@select()
+
+	return
 
 hd = ->
 	assert Array.isArray @events, 'events array not exists'
@@ -61,21 +64,34 @@ hd = ->
 
 	@events.push 'default'
 
+	setTimeout =>
+		@render()
+
+	return
+
 hr = ->
 	assert Array.isArray @events, 'events array not exists'
 	@events.push 'response'
+
+	return
 
 hs = ->
 	assert Array.isArray @events, 'events array not exists'
 	@events.push 'destroy'
 
+	return
+
 he = ->
 	assert Array.isArray @events, 'events array not exists'
 	@events.push 'error'
 
+	return
+
 hc = ->
 	assert Array.isArray @events, 'events array not exists'
 	@events.push 'compression'
+
+	return
 
 Crixalis.start 'http', port
 	.unref()
@@ -109,10 +125,6 @@ vows
 					.from('/match/compression').to(hmc)
 					.from('/match/ecompression').to(hmec)
 					.from('/match/error').to(hme)
-					.from('/match/anormal').to(hmn)
-					.from('/match/acompression').to(hmc)
-					.from('/match/aecompression').to(hmec)
-					.from('/match/aerror').to(hme)
 
 				# Setup new listeners
 				Crixalis.on 'auto', ha
@@ -125,8 +137,12 @@ vows
 					responses[@name] = @events
 
 				endpoints = [
-					'normal',   'default',  'error',  'compression',  'ecompression',  'dcompression'
-					'anormal', 'adefault', 'aerror', 'acompression', 'aecompression', 'adcompression'
+					'normal',
+					'default',
+					'error',
+					'compression',
+					'ecompression',
+					'dcompression'
 				]
 
 				for path in endpoints
@@ -136,9 +152,6 @@ vows
 
 					options.headers =
 						'accept-encoding': 'gzip'
-
-					if path.match /^a/
-						options.headers['x-async'] = 'true'
 
 					fetch options, cb
 
@@ -167,31 +180,5 @@ vows
 			dcompression: (error, responses) ->
 				events = responses.dcompression
 				assert.deepEqual events, 'auto default compression response destroy'.split ' '
-
-			anormal: (error, responses) ->
-				events = responses.anormal
-				assert.deepEqual events, 'auto main response destroy'.split ' '
-
-			aerror: (error, responses) ->
-				events = responses.aerror
-				assert.deepEqual events, 'auto main error response destroy'.split ' '
-
-			adefault: (error, responses) ->
-				events = responses.adefault
-				assert.deepEqual events, 'auto default response destroy'.split ' '
-
-			acompression: (error, responses) ->
-				events = responses.acompression
-				assert.deepEqual events, 'auto main compression response destroy'.split ' '
-
-			aecompression: (error, responses) ->
-				events = responses.aecompression
-				assert.deepEqual events, 'auto main error compression response destroy'.split ' '
-
-			adcompression: (error, responses) ->
-				events = responses.adcompression
-				assert.deepEqual events, 'auto default compression response destroy'.split ' '
-
-			# TODO: same for async
 
 	.export module

@@ -9,8 +9,6 @@ parse = JSON.parse
 Crixalis.view = 'json'
 Crixalis.plugin('request')
 Crixalis.router('/').to ->
-	@async = yes
-
 	@params.data    = parse @params.data    if @params.data and @params.type isnt 'custom'
 	@params.headers = parse @params.headers if @params.headers
 
@@ -29,6 +27,7 @@ Crixalis.router('/mirror').to ->
 		message: @message
 		headers: @req.headers
 
+	@render()
 	return
 
 Crixalis.start 'http', port

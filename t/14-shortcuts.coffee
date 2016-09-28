@@ -12,6 +12,9 @@ dumper = ->
 		method: @method
 		url: @url
 
+	@render()
+	return
+
 Crixalis.on 'default', ->
 	@code = 404
 	dumper.call @

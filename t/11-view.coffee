@@ -16,6 +16,9 @@ Crixalis.router
 	@stash = JSON.parse(@params.stash or '{}')
 	@body  = @params.body
 
+	@render()
+	return
+
 topic = (options) ->
 	options.tests.topic = (topic) ->
 		params = copy topic
@@ -30,7 +33,7 @@ topic = (options) ->
 
 		fetch params, @callback
 
-		undefined
+		return
 
 	return options.tests
 
@@ -38,7 +41,7 @@ Crixalis.start 'http', port
 	.unref()
 
 (require 'vows')
-	.describe('params')
+	.describe('view')
 	.addBatch
 		response:
 			topic:

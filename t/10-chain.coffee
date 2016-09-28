@@ -1,6 +1,6 @@
-assert = require 'assert'
-c      = require '../lib/controller.js'
-Chain  = require '../lib/chain.js'
+assert   = require 'assert'
+Crixalis = require '../lib/controller.js'
+Chain    = require '../lib/chain.js'
 
 (require 'vows')
 	.describe('chain')
@@ -8,100 +8,100 @@ Chain  = require '../lib/chain.js'
 		constructor:
 			topic: new Chain()
 
-			object: (b) ->
-				assert b         instanceof Chain
-				assert c.chain() instanceof Chain
+			object: (chain) ->
+				assert chain            instanceof Chain
+				assert Crixalis.chain() instanceof Chain
 
-				assert b         isnt c.chain()
-				assert c.chain() isnt c.chain()
+				assert chain            isnt Crixalis.chain()
+				assert Crixalis.chain() isnt Crixalis.chain()
 
-			properties: (b) ->
-				assert b.lock
+			properties: (chain) ->
+				assert chain.lock
 
-				assert Array.isArray b.queue
-				assert Array.isArray b.results
+				assert Array.isArray chain.queue
+				assert Array.isArray chain.results
 
-				assert not b.queue.length
-				assert not b.results.length
+				assert not chain.queue.length
+				assert not chain.results.length
 
-				assert b.error          is null
-				assert typeof b.forward is 'function'
-				assert typeof b.append  is 'function'
-				assert typeof b.clean   is 'function'
+				assert chain.error          is null
+				assert typeof chain.forward is 'function'
+				assert typeof chain.append  is 'function'
+				assert typeof chain.clean   is 'function'
 
-			simple: (b) ->
+			simple: (chain) ->
 				cx =
 					counter: 0
 
-				b.append context, cx, [cx]
-				assert b.queue.length is 1
-				b.forward()
+				chain.append context, cx, [cx]
+				assert chain.queue.length is 1
+				chain.forward()
 				assert cx.counter is 1
 
-				assert.equal null, value for key, value of b
+				assert.equal null, value for key, value of chain
 
 		chain:
 			topic: new Chain()
 
-			flow: (b) ->
-				b.counter = 0
+			flow: (chain) ->
+				chain.counter = 0
 
-				b.append inc, b
-				b.append inc, b
-				b.append inc, b
-				b.append((->
+				chain.append inc, chain
+				chain.append inc, chain
+				chain.append inc, chain
+				chain.append((->
 					assert @results.length is 3
 					assert @counter is 3
 					assert @results.pop() is 3
 					@forward()
-				), b)
+				), chain)
 
-				b.forward()
+				chain.forward()
 
-			clean: (b) ->
-				assert.equal null, value for key, value of b
+			clean: (chain) ->
+				assert.equal null, value for key, value of chain
 
 		error:
 			topic: new Chain()
 
-			flow: (b) ->
-				b.counter = 0
+			flow: (chain) ->
+				chain.counter = 0
 
-				b.error = (error) ->
+				chain.error = (error) ->
 					assert @counter is 2
 					assert @results.length is 2
 					assert @results.pop() is 2
 					assert error is true
 
-				b.append inc, b
-				b.append inc, b
+				chain.append inc, chain
+				chain.append inc, chain
 
-				b.append (next) ->
+				chain.append (next) ->
 					next(true)
 
-				b.append ->
+				chain.append ->
 					assert false
 
-				b.forward()
+				chain.forward()
 
-			clean: (b) ->
-				assert.equal null, value for key, value of b
+			clean: (chain) ->
+				assert.equal null, value for key, value of chain
 
 		nofwd:
 			topic: new Chain()
 
-			flow: (b) ->
-				b.append((->
+			flow: (chain) ->
+				chain.append((->
 					@forward()
-				), b)
-				b.append (next) ->
+				), chain)
+				chain.append (next) ->
 					next()
-				b.append ->
+				chain.append ->
 
-				b.forward()
+				chain.forward()
 
-			clean: (b) ->
-				assert.equal null, value for key, value of b
+			clean: (chain) ->
+				assert.equal null, value for key, value of chain
 
 	.export module
 

@@ -18,6 +18,9 @@ Crixalis.router
 	assert.equal typeof @params, 'object'
 	assert.equal Object.keys(@params).length, 0
 
+	@render()
+	return
+
 .from('/get')
 .to ->
 	assert @is_get
@@ -25,6 +28,9 @@ Crixalis.router
 	assert.equal @params.p2, 2
 	assert.equal @params.p3, 3
 	assert.equal Object.keys(@params).length, 3
+
+	@render()
+	return
 
 .from('/post')
 .to ->
@@ -34,15 +40,24 @@ Crixalis.router
 	assert.equal @params.p3, 2
 	assert.equal Object.keys(@params).length, 3
 
+	@render()
+	return
+
 .from('/post4')
 .to ->
 	assert @is_post
 	assert.equal Object.keys(@params).length, 3
 	@body = [@params.p1, @params.p2, @params.p3].join(' ')
 
+	@render()
+	return
+
 .from('/nopost')
 .to ->
 	assert false
+
+	@render()
+	return
 
 .from('/octet')
 .to ->
@@ -51,12 +66,18 @@ Crixalis.router
 	assert.equal @message.type, 'application/octet-stream'
 	@body = @message.data
 
+	@render()
+	return
+
 .from('/json')
 .to ->
 	assert @is_post
 	assert @message
 	assert.equal @message.type, 'application/json'
 	@body = @message.data.text
+
+	@render()
+	return
 
 vows
 	.describe('params')
