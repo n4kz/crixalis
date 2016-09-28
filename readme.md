@@ -4,7 +4,7 @@ Lightweight web framework for node.js
 
 # Features
 
-- Small, fully documented and easily extendable core
+- Small, documented and easily extendable core
 - Advanced routing system (content type, method, host) with regexp support and placeholders
 - Compression support (gzip, deflate)
 - Static file serving support
@@ -27,31 +27,27 @@ Crixalis
 
 	/* Add route with placeholder */
 	.get('/hello/:name', function () {
-		/* Set view for this response */
-		this.view = 'json';
-
-		/* Set data for view */
+		/* Prepare data for view */
 		this.stash.json = {
-			message: ['Hello, ', '!'].join(this.params.name)
+			message: 'Hello, ' + this.params.name + '!'
 		};
+
+		/* Send result using json view */
+		that.render('json');
 	})
 
 	/* Add simple route */
 	.get('/info', function () {
 		var that = this;
 
-		/* Async response */
-		this.async = true;
-
 		require('fs').readFile('./package.json', function (error, result) {
-			/* Handle error */
 			if (error) {
+				/* Handle error */
 				that.error(500);
-				return;
+			} else {
+				/* Set response body */
+				that.body = result;
 			}
-
-			/* Set response body */
-			that.body = result;
 
 			/* Send result */
 			that.render();
@@ -63,17 +59,12 @@ Crixalis
 	/* Override default event handler */
 	.on('default', function () {
 		this.redirect('/hello/World');
+		this.render();
 	})
 
 	/* Start server on port 8080 */
 	.start('http', 8080);
 ```
-
-# Documentation
-
-Complete API docs for latest version are available [here](http://crixalis.n4kz.com).
-
-You can generate docs yourself for offline browsing using `make docs` command.
 
 # Plugins
 
@@ -90,7 +81,7 @@ Available core plugins
 
 # Static server
 
-Crixalis comes with simple script for serving static files
+Crixalis comes with script for serving static files
 
 ```bash
 	# Start web server on port `3000` and serve files from `~/www/`
