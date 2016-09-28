@@ -1,6 +1,6 @@
-assert = require 'assert'
-c      = require '../lib/controller.js'
-ee     = require('events').EventEmitter
+assert       = require('assert')
+Crixalis     = require('../lib/controller.js')
+EventEmitter = require('events').EventEmitter
 
 (require 'vows')
 	.describe('params')
@@ -9,32 +9,44 @@ ee     = require('events').EventEmitter
 			topic: null
 
 			constructor: ->
-				assert.instanceOf c, c.constructor
-				assert.instanceOf c, ee
-
-			context: ->
-				assert.isFunction c.handler
-				assert.equal c, c.handler.prototype
+				assert.instanceOf Crixalis, Crixalis.constructor
+				assert.instanceOf Crixalis, EventEmitter
 
 			properties: ->
-				assert.equal c.version, require('../package').version
-				assert.equal c.signature, 'Crixalis'
-				assert.equal c.postSize, 1 << 20
-				assert.equal c.view, 'html'
-				assert.equal c.code, 0
-				assert.equal c.body, ''
-				assert.equal c.logger, console
+				assert.equal Crixalis.version, require('../package').version
+				assert.equal Crixalis.signature, 'Crixalis'
+				assert.equal Crixalis.postSize, 1 << 20
+				assert.equal Crixalis.view, 'html'
+				assert.equal Crixalis.code, 0
+				assert.equal Crixalis.body, ''
+				assert.equal Crixalis.logger, console
 
 			methods: ->
-				for method in 'router sendHeaders plugin select render error redirect cookie chain noop define start'.split(' ')
-					assert.isFunction c[method]
+				methods = [
+					'createContext',
+					'router',
+					'sendHeaders',
+					'plugin',
+					'select',
+					'render',
+					'error',
+					'redirect',
+					'cookie',
+					'chain',
+					'noop',
+					'define',
+					'start'
+				]
+
+				for method in methods
+					assert.isFunction Crixalis[method]
 
 			private: ->
-				assert.isObject   c._views
-				assert.isObject   c._routes
-				assert.isArray    c._patterns
-				assert.isFunction c._route
-				assert.isFunction c._response
-				assert.isFunction c._destroy
+				assert.isObject   Crixalis._views
+				assert.isObject   Crixalis._routes
+				assert.isArray    Crixalis._patterns
+				assert.isFunction Crixalis._route
+				assert.isFunction Crixalis._response
+				assert.isFunction Crixalis._destroy
 
 	.export module
