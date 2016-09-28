@@ -25,9 +25,6 @@ plugins =
 	less:
 		less: 'function'
 
-	mode:
-		local: 'boolean'
-
 	# processor is not listed here (is not a plugin but a plugin generator)
 
 try
