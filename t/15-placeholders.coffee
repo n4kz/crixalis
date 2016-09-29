@@ -9,7 +9,7 @@ Crixalis.start 'http', port
 
 dummy = ->
 
-parts = ['alpha', 'bravo4_03', '_-_5690_i-', '$^', '(...', '+-*[#]']
+parts = ['alpha', 'bravo4_03', '_-_5690_i-', '$^', '(...', '+-*[#]', 55]
 
 (require 'vows')
 	.describe('shortcuts')
@@ -18,8 +18,11 @@ parts = ['alpha', 'bravo4_03', '_-_5690_i-', '$^', '(...', '+-*[#]']
 			topic: 'placeholders'
 
 			one: () ->
-				(route = Crixalis.router().from('/:item/list'))
+				Crixalis.router()
+					.from('/:item/list')
 					.to(dummy)
+
+				route = Crixalis._routes.pop()
 
 				for item in parts
 					context =
@@ -30,8 +33,11 @@ parts = ['alpha', 'bravo4_03', '_-_5690_i-', '$^', '(...', '+-*[#]']
 					assert.equal context.params.item, item
 
 			two: (topic) ->
-				(route = Crixalis.router().from('/:item/:action'))
+				Crixalis.router()
+					.from('/:item/:action')
 					.to(dummy)
+
+				route = Crixalis._routes.pop()
 
 				for item in parts
 					for action in parts
@@ -43,9 +49,42 @@ parts = ['alpha', 'bravo4_03', '_-_5690_i-', '$^', '(...', '+-*[#]']
 						assert.equal context.params.item,   item
 						assert.equal context.params.action, action
 
-			negative: (topic) ->
-				(route = Crixalis.router().from('/:item'))
+			escape: (topic) ->
+				Crixalis.router()
+					.from('/([^\/]+)/:action')
 					.to(dummy)
+
+				route = Crixalis._routes.pop()
+
+				for item in parts
+					for action in parts
+						context =
+							params: {}
+							url: "/#{item}/#{action}"
+
+						assert not route.match context
+
+			invalid: (topic) ->
+				Crixalis.router()
+					.from('/([^\\//:action')
+					.to(dummy)
+
+				route = Crixalis._routes.pop()
+
+				for item in parts
+					for action in parts
+						context =
+							params: {}
+							url: "/#{item}/#{action}"
+
+						assert not route.match context
+
+			negative: (topic) ->
+				Crixalis.router()
+					.from('/:item/5')
+					.to(dummy)
+
+				route = Crixalis._routes.pop()
 
 				for item in parts
 					for action in parts

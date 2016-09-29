@@ -43,8 +43,7 @@ EventEmitter = require('events').EventEmitter
 
 			private: ->
 				assert.isObject   Crixalis._views
-				assert.isObject   Crixalis._routes
-				assert.isArray    Crixalis._patterns
+				assert.isArray    Crixalis._routes
 				assert.isFunction Crixalis._route
 				assert.isFunction Crixalis._response
 				assert.isFunction Crixalis._destroy

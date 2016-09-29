@@ -162,10 +162,12 @@ vows
 				ok = false
 				callback = ->
 				route = new Route
-					_route: (how, where) ->
+					_route: (source, destination) ->
 						ok = true
-						assert.equal where, callback
-						assert.equal how, route
+						assert.equal destination, callback
+
+						assert source instanceof Route
+						assert.notEqual source, route
 
 				assert.equal route.from('test').to(callback), route
 				assert ok
@@ -200,59 +202,6 @@ vows
 
 				try
 					route.set ->
-				catch error
-					assert error instanceof Error
-					ok = true
-				finally
-					assert ok
-
-			'Route.set(#string, value)': ->
-				ok = false
-				route = new Route {}, /test/
-
-				# Plain property
-				assert.equal route.set('url', 'test'), route
-				assert.equal route.url, 'test'
-				assert not route.pattern
-
-				# Objectified property
-				assert.equal route.set('methods', 'GET'), route
-				assert.equal typeof route.methods, 'object'
-				assert.equal Object.keys(route.methods).length, 1
-				assert route.methods['GET']
-
-				# Array
-				assert.equal route.set('methods', ['HEAD', 'POST']), route
-				assert.equal typeof route.methods, 'object'
-				assert.equal Object.keys(route.methods).length, 2
-				assert route.methods['POST']
-				assert route.methods['HEAD']
-
-				# Objectified property undefined
-				assert.equal route.set('methods', undefined), route
-				assert not route.methods
-
-				# Plain property undefined
-				assert.equal route.set('url', undefined), route
-				assert not route.url
-
-			'Route.set(#string, #null)': ->
-				ok = false
-				route = new Route {}
-
-				try
-					route.set 'url', null
-				catch error
-					assert error instanceof Error
-					ok = true
-				finally
-					assert ok
-
-				route = new Route {}
-				ok = false
-
-				try
-					route.set 'pattern', null
 				catch error
 					assert error instanceof Error
 					ok = true
@@ -340,9 +289,11 @@ vows
 				ok = false
 				route = new Route {}, 'test'
 
-				route.set 'url', 'test'
+				route.set url: 'test'
 				route.set methods: ['GET', 'POST']
+
 				assert.equal route.unset(['url', 'methods', 'pattern']), route
+
 				assert not route.url
 				assert not route.methods
 				assert not route.pattern
@@ -436,10 +387,11 @@ vows
 				assert !route.match(context2)
 				assert !route.match(context3)
 
-			'Route.match(#pattern|capture)': ->
+			'Route.match(#pattern|mapping)': ->
 				route = new Route({}).set
 					pattern: /\/test\/(123|456)\/ok/
-					capture: '$1': 'number'
+					mapping:
+						$1: 'number'
 
 				context =
 					params: {}
@@ -455,18 +407,19 @@ vows
 
 				assert route.match(context)
 				assert.equal context.params.number, '123'
-				assert.equal context.params.$1, '123'
+				assert not context.params.$1
 				assert not context.params.$2
 
 				context =
 					params: {}
 					url: '/test/456/ok'
 
-				assert.equal route.set('capture', { '$1': 'test' }), route
+				route.set mapping: $1: 'test'
+
 				assert route.match(context)
 				assert.equal context.params.test, '456'
-				assert.equal context.params.$1, '456'
 				assert not context.params.number
+				assert not context.params.$1
 				assert not context.params.$2
 
 			'Route.match(#types)': ->
@@ -487,22 +440,19 @@ vows
 
 			'Route.copy(#full)': ->
 				route = new Route({}).set
-					url: 'test'
-					methods: ['GET', 'POST']
-					hosts: ['apple.com', 'microsoft.com']
+					url     : '/test'
+					methods : ['GET', 'POST']
+					hosts   : ['apple.com', 'microsoft.com']
+
 				copy = route.copy()
 
 				assert copy instanceof Route
 				assert.notEqual copy, route
 				assert not copy.types
-				assert not copy.capture
 				assert not copy.pattern
 
-				for field in ['url', 'pattern', 'capture', 'types']
-					assert.equal copy[field], route[field]
-
 				assert.deepEqual copy.methods, route.methods
-				assert.deepEqual copy.hosts, route.hosts
+				assert.deepEqual copy.hosts,   route.hosts
 
 			'Route.copy(#empty)': ->
 				route = new Route {}
