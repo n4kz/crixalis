@@ -14,7 +14,7 @@ parts = ['alpha', 'bravo4_03', '_-_5690_i-', '+', '55']
 (require 'vows')
 	.describe('shortcuts')
 	.addBatch
-		'placeholders':
+		placeholders:
 			topic: 'placeholders'
 
 			one: ->
@@ -78,7 +78,25 @@ parts = ['alpha', 'bravo4_03', '_-_5690_i-', '+', '55']
 
 			negative: ->
 				Crixalis.router()
-					.from('/:item/5')
+					.from('/test/:item')
+					.to(dummy)
+
+				route = Crixalis._routes.pop()
+
+				for item in parts
+					for action in parts
+						context =
+							url     : "/#{item}/#{action}"
+							params  : {}
+
+						assert not route.match context
+
+				assert not route.match url: '/test/file.jpg', params: {}
+				assert     route.match url: '/test/file',     params: {}
+
+			'asterisk#middle': ->
+				Crixalis.router()
+					.from('/*/alpha')
 					.to(dummy)
 
 				route = Crixalis._routes.pop()
@@ -87,58 +105,43 @@ parts = ['alpha', 'bravo4_03', '_-_5690_i-', '+', '55']
 					for action in parts
 						context = url: "/#{item}/#{action}"
 
-						assert not route.match context
-
-			asterisk: ->
-				middle: ->
-					Crixalis.router()
-						.from('/*/alpha')
-						.to(dummy)
-
-					route = Crixalis._routes.pop()
-
-					for item in parts
-						for action in parts
-							context = url: "/#{item}/#{action}"
-
-							if action is 'alpha'
-								assert route.match context
-							else
-								assert not route.match context
-
-				end: ->
-					Crixalis.router()
-						.from('/alpha/*')
-						.to(dummy)
-
-					route = Crixalis._routes.pop()
-
-					for item in parts
-						for action in parts
-							context = url: "/#{item}/#{action}"
-
-							if item is 'alpha'
-								assert route.match context
-							else
-								assert not route.match context
-
-				double: ->
-					Crixalis.router()
-						.from('/*/test/*')
-						.to(dummy)
-
-					route = Crixalis._routes.pop()
-
-					for item in parts
-						for action in parts
-							context = url: "/#{item}/test/#{action}"
-
+						if action is 'alpha'
 							assert route.match context
+						else
+							assert not route.match context
 
-					assert not route.match url: '/notesthere'
-					assert not route.match url: '/sample/test'
+			'asterisk#end': ->
+				Crixalis.router()
+					.from('/alpha/*')
+					.to(dummy)
 
-					assert route.match url: '//test/'
+				route = Crixalis._routes.pop()
+
+				for item in parts
+					for action in parts
+						context = url: "/#{item}/#{action}"
+
+						if item is 'alpha'
+							assert route.match context
+						else
+							assert not route.match context
+
+			'asterisk#double': ->
+				Crixalis.router()
+					.from('/*/test/*')
+					.to(dummy)
+
+				route = Crixalis._routes.pop()
+
+				for item in parts
+					for action in parts
+						context = url: "/#{item}/test/#{action}"
+
+						assert route.match context
+
+				assert not route.match url: '/notesthere'
+				assert not route.match url: '/abc/test/'
+				assert not route.match url: '//test/abc'
 
 			everything: ->
 				Crixalis.router()
