@@ -7,17 +7,17 @@ port     = +process.env.CRIXALIS_PORT + 11
 
 status = require('http').STATUS_CODES
 
-Crixalis.router
-	methods: ['GET']
+Crixalis
+	.route '/', methods: ['GET'], ->
+		@view  = @params.view
+		@stash = JSON.parse(@params.stash or '{}')
+		@body  = @params.body
 
-.from('/')
-.to ->
-	@view  = @params.view
-	@stash = JSON.parse(@params.stash or '{}')
-	@body  = @params.body
+		@render()
+		return
 
-	@render()
-	return
+	.start 'http', port
+	.unref()
 
 topic = (options) ->
 	options.tests.topic = (topic) ->
@@ -36,9 +36,6 @@ topic = (options) ->
 		return
 
 	return options.tests
-
-Crixalis.start 'http', port
-	.unref()
 
 (require 'vows')
 	.describe('view')

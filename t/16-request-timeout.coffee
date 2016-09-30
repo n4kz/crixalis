@@ -2,19 +2,16 @@ Crixalis = require '../lib/controller.js'
 assert   = require 'assert'
 port     = +process.env.CRIXALIS_PORT + 16
 
-Crixalis.router('/').to ->
-	@async = yes
-
-	@view = 'json'
-	@stash.json = status: 'ok'
-
-	setTimeout((=>
-		@render()
-	), 50)
-
-	return
-
 Crixalis
+	.route '/', ->
+		@view = 'json'
+		@stash.json = status: 'ok'
+
+		setTimeout((=>
+			@render()
+		), 50)
+
+		return
 	.plugin('request')
 	.start('http', port)
 	.unref()

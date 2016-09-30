@@ -5,59 +5,57 @@ copy     = require './lib/copy.js'
 Crixalis = require '../lib/controller.js'
 port     = +process.env.CRIXALIS_PORT + 7
 
-Crixalis.start 'http', port
+Crixalis
+	.route '/set', ->
+		@cookie
+			name: 'first'
+			value: 256
+			domain: 'example.com'
+
+		@cookie
+			name: 'second'
+			value: '123DFIQWE'
+			path: '/set'
+
+		@cookie
+			name: 'third'
+			value: 'frfr'
+			http: no
+			secure: yes
+
+		time = new Date()
+
+		@cookie
+			name: 'fourth'
+			value: '753'
+			expires: time
+
+		@cookie
+			name: 'expired'
+			value: null
+
+		assert.deepEqual this.headers,
+			'Set-Cookie': [
+				'first=256; domain=example.com; httponly',
+				'second=123DFIQWE; path=/set; httponly',
+				'third=frfr; secure',
+				"fourth=753; expires=#{ time.toUTCString() }; httponly",
+				"expired=; expires=#{ new Date(0).toUTCString() }; httponly"
+			]
+
+		@render()
+		return
+
+	.route '/get', ->
+		assert.equal @cookies.test, 3124
+		assert.equal @cookies.foo, 'ok'
+		assert.equal Object.keys(@cookies).length, 2
+
+		@render()
+		return
+
+	.start 'http', port
 	.unref()
-
-Crixalis.router
-	url: '/set'
-.to ->
-	@cookie
-		name: 'first'
-		value: 256
-		domain: 'example.com'
-
-	@cookie
-		name: 'second'
-		value: '123DFIQWE'
-		path: '/set'
-
-	@cookie
-		name: 'third'
-		value: 'frfr'
-		http: no
-		secure: yes
-
-	time = new Date()
-
-	@cookie
-		name: 'fourth'
-		value: '753'
-		expires: time
-
-	@cookie
-		name: 'expired'
-		value: null
-
-	assert.deepEqual this.headers,
-		'Set-Cookie': [
-			'first=256; domain=example.com; httponly',
-			'second=123DFIQWE; path=/set; httponly',
-			'third=frfr; secure',
-			"fourth=753; expires=#{ time.toUTCString() }; httponly",
-			"expired=; expires=#{ new Date(0).toUTCString() }; httponly"
-		]
-
-	@render()
-	return
-.set
-	url: '/get'
-.to ->
-	assert.equal @cookies.test, 3124
-	assert.equal @cookies.foo, 'ok'
-	assert.equal Object.keys(@cookies).length, 2
-
-	@render()
-	return
 
 vows
 	.describe('cookies')

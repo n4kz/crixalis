@@ -5,11 +5,8 @@ copy     = require './lib/copy.js'
 Crixalis = require '../lib/controller.js'
 port     = +process.env.CRIXALIS_PORT + 9
 
-Crixalis.start 'http', port
-	.unref()
-
-Crixalis.router('/')
-	.to ->
+Crixalis
+	.route '/', ->
 		assert Array.isArray @types
 		assert.equal @types.length, @params.types
 		@body = @types.join ':'
@@ -17,10 +14,7 @@ Crixalis.router('/')
 		@render()
 		return
 
-Crixalis.router('/_')
-	.set
-		types: ['text/javascript', 'application/javascript']
-	.to ->
+	.route '/_', types: ['text/javascript', 'application/javascript'], ->
 		assert Array.isArray @types
 		assert.equal @types.length, @params.types
 		@body = @types.join '|'
@@ -28,16 +22,16 @@ Crixalis.router('/_')
 		@render()
 		return
 
-Crixalis.router('/_')
-	.set
-		types: ['image/png', 'custom/type']
-	.to ->
+	.route '/_', types: ['image/png', 'custom/type'], ->
 		assert Array.isArray @types
 		assert.equal @types.length, @params.types
 		@body = @types.join '%'
 
 		@render()
 		return
+
+	.start 'http', port
+	.unref()
 
 vows
 	.describe('accept')

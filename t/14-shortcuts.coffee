@@ -3,7 +3,6 @@ fetch    = require './lib/fetch.js'
 Crixalis = require '../lib/controller.js'
 
 port = +process.env.CRIXALIS_PORT + 14
-Crixalis.plugin 'shortcuts', ['put', 'get', 'post', 'any']
 
 dumper = ->
 	@view = 'json'
@@ -15,11 +14,13 @@ dumper = ->
 	@render()
 	return
 
-Crixalis.on 'default', ->
-	@code = 404
-	dumper.call @
+Crixalis
+	.plugin 'shortcuts', ['get', 'Post', 'PUT']
+	.on 'default', ->
+		@code = 404
+		dumper.call @
 
-Crixalis.start 'http', port
+	.start 'http', port
 	.unref()
 
 checker = (expected) ->
@@ -42,172 +43,61 @@ request = (options) ->
 (require 'vows')
 	.describe('shortcuts')
 	.addBatch
-		'via#get':
-			topic: request
-				path: '/via/A'
-				before: ->
-					Crixalis.router()
-						.from('/via/A')
-						.via('GET')
-						.to(dumper)
+		'define':
+			topic: null
 
-			result: checker
-				code: 200
-				method: 'GET'
-				url: '/via/A'
+			get: ->
+				assert.isFunction Crixalis.get
 
-		'via#post':
-			topic: request
-				path: '/via/A'
-				method: 'POST'
-				before: ->
-					Crixalis.router()
-						.from('/via/A')
-						.via('POST')
-						.to(dumper)
+			post: ->
+				assert.isFunction Crixalis.post
 
-			result: checker
-				code: 200
-				method: 'POST'
-				url: '/via/A'
+			put: ->
+				assert.isFunction Crixalis.put
 
-		'via#put':
-			topic: request
-				path: '/via/A'
-				method: 'PUT'
-				before: ->
-					1
+			undefined: ->
+				assert.isUndefined Crixalis.head
+				assert.isUndefined Crixalis.options
+				assert.isUndefined Crixalis.patch
+				assert.isUndefined Crixalis.delete
 
-			result: checker
-				code: 404
-				method: 'PUT'
-				url: '/via/A'
-
-		'via#get+post':
-			topic: request
-				path: '/via/B'
-				method: 'GET'
-				before: ->
-					Crixalis.router()
-						.from('/via/B')
-						.via(['GET', 'POST'])
-						.to(dumper)
-
-			result: checker
-				code: 200
-				method: 'GET'
-				url: '/via/B'
-
-		'via#error':
-			topic: 'error'
-			result: (topic) ->
-				assert.throws ->
-					Crixalis.router()
-						.from('/via/null')
-						.via()
-
-				assert.throws ->
-					Crixalis.router()
-						.from('/via/null')
-						.via([], undefined)
-
-		'methods':
-			topic: Crixalis.router()
-
-			get: (route) ->
-				assert.isFunction route.get
-
-			post: (route) ->
-				assert.isFunction route.post
-
-			put: (route) ->
-				assert.isFunction route.put
-
-			any: (route) ->
-				assert.isFunction route.any
-
-			undefined: (route) ->
-				assert.isUndefined route.head
-				assert.isUndefined route.options
-				assert.isUndefined route.patch
-				assert.isUndefined route.delete
-
-		'methods#get':
+		'verify':
 			topic: 'get'
 
-			simple:
+			get:
 				topic: request
 					path: '/methods/C'
 					method: 'GET'
 					before: ->
-						Crixalis.router()
-							.from('/methods/C')
-							.get()
-							.to(dumper)
+						Crixalis.get('/methods/C', dumper)
 
 				result: checker
 					code: 200
 					method: 'GET'
 					url: '/methods/C'
 
-			path:
+			post:
 				topic: request
 					path: '/methods/D'
-					method: 'GET'
+					method: 'POST'
 					before: ->
-						Crixalis.router()
-							.get('/methods/D')
-							.to(dumper)
+						Crixalis.post('/methods/D', dumper)
 
 				result: checker
 					code: 200
-					method: 'GET'
+					method: 'POST'
 					url: '/methods/D'
 
-			full:
+			put:
 				topic: request
 					path: '/methods/E'
-					method: 'GET'
+					method: 'PUT'
 					before: ->
-						Crixalis.router()
-							.get('/methods/E', dumper)
+						Crixalis.put('/methods/E', dumper)
 
 				result: checker
 					code: 200
-					method: 'GET'
+					method: 'PUT'
 					url: '/methods/E'
-
-		'methods#any':
-			topic: 'any'
-
-			simple:
-				topic: request
-					path: '/methods/F'
-					method: 'GET'
-					before: ->
-						Crixalis.router()
-							.any('/methods/F', dumper)
-							.to(dumper)
-
-				result: checker
-					code: 200
-					method: 'GET'
-					url: '/methods/F'
-
-			override:
-				topic: request
-					path: '/methods/G'
-					method: 'PUT'
-					before: ->
-						Crixalis.router()
-							.from('/methods/G')
-							.via('GET', 'HEAD')
-							.any()
-							.to(dumper)
-
-				result: checker
-					code: 200
-					method: 'PUT'
-					url: '/methods/G'
 
 	.export module

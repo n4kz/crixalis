@@ -24,7 +24,7 @@ EventEmitter = require('events').EventEmitter
 			methods: ->
 				methods = [
 					'createContext',
-					'router',
+					'route',
 					'sendHeaders',
 					'plugin',
 					'select',

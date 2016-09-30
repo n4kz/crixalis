@@ -7,30 +7,31 @@ port  = +process.env.CRIXALIS_PORT + 13
 parse = JSON.parse
 
 Crixalis.view = 'json'
-Crixalis.plugin('request')
-Crixalis.router('/').to ->
-	@params.data    = parse @params.data    if @params.data and @params.type isnt 'custom'
-	@params.headers = parse @params.headers if @params.headers
+Crixalis
+	.plugin('request')
+	.route '/', ->
+		@params.data    = parse @params.data    if @params.data and @params.type isnt 'custom'
+		@params.headers = parse @params.headers if @params.headers
 
-	@request @params, (error, result) =>
+		@request @params, (error, result) =>
+			@stash.json =
+				code: result.statusCode
+				body: result.message.toString()
+			@render()
+
+		return
+
+	.route '/mirror', ->
 		@stash.json =
-			code: result.statusCode
-			body: result.message.toString()
+			method: @method
+			params: @params
+			message: @message
+			headers: @req.headers
+
 		@render()
+		return
 
-	return
-
-Crixalis.router('/mirror').to ->
-	@stash.json =
-		method: @method
-		params: @params
-		message: @message
-		headers: @req.headers
-
-	@render()
-	return
-
-Crixalis.start 'http', port
+	.start 'http', port
 	.unref()
 
 request = (options) ->

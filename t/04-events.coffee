@@ -120,11 +120,11 @@ vows
 				Crixalis.plugin 'compression'
 
 				# Add some routes
-				Crixalis.router()
-					.from('/match/normal').to(hmn)
-					.from('/match/compression').to(hmc)
-					.from('/match/ecompression').to(hmec)
-					.from('/match/error').to(hme)
+				Crixalis
+					.route('/match/normal', hmn)
+					.route('/match/compression', hmc)
+					.route('/match/ecompression', hmec)
+					.route('/match/error', hme)
 
 				# Setup new listeners
 				Crixalis.on 'auto', ha

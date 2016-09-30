@@ -9,17 +9,16 @@ Crixalis
 	.plugin('compression')
 	.plugin('request')
 	.plugin('shortcuts')
+	.get '/', ->
+		@stash.json = Data
+
+		@render()
+		return
 	.start('http', port)
 	.unref()
 
 Crixalis.staticPath = 't'
 Crixalis.view = 'json'
-
-Crixalis.router().get '/', ->
-	@stash.json = Data
-
-	@render()
-	return
 
 (require 'vows')
 	.describe('compression')
