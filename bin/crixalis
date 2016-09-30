@@ -36,7 +36,7 @@ if (argv.version) {
 }
 
 Crixalis
-	.plugin('static')
+	.plugin('static', { route: true })
 	.plugin('access')
 	.plugin('compression');
 
@@ -58,10 +58,8 @@ Crixalis.staticPath = resolve(process.cwd(), argv.path);
 Crixalis.cachePath  = resolve(process.cwd(), argv.temp);
 
 Crixalis.router()
-	.set({
-		pattern: /.*/,
-		methods: ['GET', 'HEAD']
-	}).to(function () {
+	.set({ url: '*', methods: ['GET', 'HEAD'] })
+	.to(function () {
 		var path = resolve(this.staticPath + this.url + '/index.html'),
 			that = this;
 

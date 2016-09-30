@@ -4,7 +4,7 @@ fs       = require 'fs'
 port     = +process.env.CRIXALIS_PORT + 17
 
 Crixalis
-	.plugin('static')
+	.plugin('static', route: yes)
 	.plugin('request')
 	.start('http', port)
 	.unref()

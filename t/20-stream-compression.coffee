@@ -6,7 +6,7 @@ fs       = require 'fs'
 
 Crixalis
 	.plugin('compression')
-	.plugin('static')
+	.plugin('static', route: true)
 	.plugin('request')
 	.start('http', port)
 	.unref()
