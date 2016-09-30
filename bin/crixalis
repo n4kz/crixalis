@@ -57,9 +57,8 @@ try {
 Crixalis.staticPath = resolve(process.cwd(), argv.path);
 Crixalis.cachePath  = resolve(process.cwd(), argv.temp);
 
-Crixalis.router()
-	.set({ url: '*', methods: ['GET', 'HEAD'] })
-	.to(function () {
+Crixalis
+	.route('*', { methods: ['GET', 'HEAD'] }, function () {
 		var path = resolve(this.staticPath + this.url + '/index.html'),
 			that = this;
 
