@@ -59,15 +59,12 @@ Crixalis.cachePath  = resolve(process.cwd(), argv.temp);
 
 Crixalis
 	.route('*', { methods: ['GET', 'HEAD'] }, function () {
-		var path = resolve(this.staticPath + this.url + '/index.html'),
-			that = this;
+		var path = resolve(this.staticPath + this.url + '/index.html');
 
-		if (!path.indexOf(this.staticPath)) {
-			this.serve(path, function () {
-				that.error(404, true);
-			});
+		if (path.indexOf(this.staticPath) === 0) {
+			this.serve(path, this.error.bind(this, 404));
 		} else {
-			this.error(404, true);
+			this.error(404);
 		}
 	});
 
