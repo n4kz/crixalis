@@ -16,10 +16,6 @@ dumper = ->
 
 Crixalis
 	.plugin 'shortcuts', ['get', 'Post', 'PUT']
-	.on 'default', ->
-		@code = 404
-		dumper.call @
-
 	.start 'http', port
 	.unref()
 

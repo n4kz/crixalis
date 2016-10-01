@@ -64,10 +64,10 @@ Crixalis
 
 		if (!path.indexOf(this.staticPath)) {
 			this.serve(path, function () {
-				that.emit('default');
+				that.error(404, true);
 			});
 		} else {
-			this.emit('default');
+			this.error(404, true);
 		}
 	});
 

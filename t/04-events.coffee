@@ -56,19 +56,6 @@ ha = ->
 
 	return
 
-hd = ->
-	assert Array.isArray @events, 'events array not exists'
-
-	unless @name.match /^a?dcompression/
-		@compression = no
-
-	@events.push 'default'
-
-	setTimeout =>
-		@render()
-
-	return
-
 hr = ->
 	assert Array.isArray @events, 'events array not exists'
 	@events.push 'response'
@@ -122,14 +109,13 @@ vows
 				# Add some routes
 				Crixalis
 					.route('/match/normal', hmn)
+					.route('/match/error', hme)
 					.route('/match/compression', hmc)
 					.route('/match/ecompression', hmec)
-					.route('/match/error', hme)
 
 				# Setup new listeners
 				Crixalis.on 'auto', ha
 				Crixalis.on 'response', hr
-				Crixalis.on 'default', hd
 				Crixalis.on 'error', he
 				Crixalis.on 'compression', hc
 				Crixalis.on 'destroy', ->
@@ -138,11 +124,9 @@ vows
 
 				endpoints = [
 					'normal',
-					'default',
 					'error',
 					'compression',
 					'ecompression',
-					'dcompression'
 				]
 
 				for path in endpoints
@@ -165,10 +149,6 @@ vows
 				events = responses.error
 				assert.deepEqual events, 'auto main error response destroy'.split ' '
 
-			default: (error, responses) ->
-				events = responses.default
-				assert.deepEqual events, 'auto default response destroy'.split ' '
-
 			compression: (error, responses) ->
 				events = responses.compression
 				assert.deepEqual events, 'auto main compression response destroy'.split ' '
@@ -176,9 +156,5 @@ vows
 			ecompression: (error, responses) ->
 				events = responses.ecompression
 				assert.deepEqual events, 'auto main error compression response destroy'.split ' '
-
-			dcompression: (error, responses) ->
-				events = responses.dcompression
-				assert.deepEqual events, 'auto default compression response destroy'.split ' '
 
 	.export module
