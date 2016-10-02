@@ -101,7 +101,7 @@ Crixalis
 			topic: ->
 				callback = @callback
 
-				Crixalis.route '/json', methods: ['POST'], ->
+				Crixalis.route '/json', { methods: ['POST'], types: ['application/json'] } , ->
 					callback(null, @)
 
 					@code = 204
@@ -167,7 +167,7 @@ Crixalis
 			topic: ->
 				callback = @callback
 
-				Crixalis.route '/form', methods: ['POST'], ->
+				Crixalis.route '/form', { methods: ['POST'], types: 'application/*' }, ->
 					callback(null, @)
 
 					@code = 204

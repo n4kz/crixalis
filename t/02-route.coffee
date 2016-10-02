@@ -185,19 +185,17 @@ vows
 				assert.isUndefined context.params.$2
 
 			types: ->
-				route = new Route undefined, types: ['text/html', 'text/text']
+				route = new Route undefined, types: ['text/*', 'application/javascript']
 
-				assert.isTrue route.match types: ['text/html']
-				assert.isTrue route.match types: ['text/text']
-				assert.isTrue route.match types: ['html/html', 'text/text']
-				assert.isTrue route.match types: ['text/text', 'html/html']
-				assert.isTrue route.match types: ['text/text', 'text/html']
-				assert.isTrue route.match types: ['text/*']
-				assert.isTrue route.match types: ['text/plain', '*/*']
+				assert.isTrue route.match message: type: 'text/html'
+				assert.isTrue route.match message: type: 'text/javascript'
+				assert.isTrue route.match message: type: 'application/javascript'
 
-				assert.isFalse route.match types: []
-				assert.isFalse route.match types: ['application/*']
-				assert.isFalse route.match types: ['application/json']
-				assert.isFalse route.match types: ['application/json', 'html/html']
+				assert.isFalse route.match message: type: '*/*'
+				assert.isFalse route.match message: type: 'application/*'
+				assert.isFalse route.match message: type: 'application/json'
+				assert.isFalse route.match message: type: '*/text'
+				assert.isFalse route.match message: type: 'text'
+				assert.isFalse route.match message: type: '*'
 
 	.export module
