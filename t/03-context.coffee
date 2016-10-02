@@ -46,8 +46,8 @@ Crixalis
 				return
 
 			start: (context) ->
-				assert context.start > stamp
-				assert context.start < Date.now()
+				assert context.start >= stamp
+				assert context.start <= Date.now()
 
 			url: (context) ->
 				assert.equal context.url, '/info'
@@ -119,8 +119,8 @@ Crixalis
 				return
 
 			start: (context) ->
-				assert context.start > stamp
-				assert context.start < Date.now()
+				assert context.start >= stamp
+				assert context.start <= Date.now()
 
 			url: (context) ->
 				assert.equal context.url, '/json'
@@ -185,8 +185,8 @@ Crixalis
 				return
 
 			start: (context) ->
-				assert context.start > stamp
-				assert context.start < Date.now()
+				assert context.start >= stamp
+				assert context.start <= Date.now()
 
 			url: (context) ->
 				assert.equal context.url, '/form'
