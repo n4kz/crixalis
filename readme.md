@@ -22,9 +22,6 @@ Crixalis
 	/* Load plugin */
 	.plugin('shortcuts')
 
-	/* Get router object */
-	.router()
-
 	/* Add route with placeholder */
 	.get('/hello/:name', function () {
 		/* Prepare data for view */
@@ -33,11 +30,11 @@ Crixalis
 		};
 
 		/* Send result using json view */
-		that.render('json');
+		this.render('json');
 	})
 
-	/* Add simple route */
-	.get('/info', function () {
+	/* Add another route for GET and HEAD methods */
+	.route('/info', { methods: ['GET', 'HEAD'] }, function () {
 		var that = this;
 
 		require('fs').readFile('./package.json', function (error, result) {
@@ -52,12 +49,10 @@ Crixalis
 			/* Send result */
 			that.render();
 		});
-	});
+	})
 
-Crixalis
-
-	/* Override default event handler */
-	.on('default', function () {
+	/* Catch everything else */
+	.route('*', function () {
 		this.redirect('/hello/World');
 		this.render();
 	})
