@@ -1,468 +1,203 @@
 assert = require 'assert'
 vows   = require 'vows'
-Route  = require '../lib/route.js'
+Route  = require '../lib/route'
 
 vows
-	.describe('routes')
+	.describe('route')
 	.addBatch
-		Route:
-			'new Route(c, \'/test\')': ->
-				c = {}
-				url = '/test'
-				route = new Route c, url
+		constructor:
+			empty: ->
+				assert.instanceOf((new Route), Route)
 
-				assert route instanceof Route
+			string: ->
+				route = new Route url = '/test'
+
+				assert.instanceOf route, Route
 				assert.equal typeof route.url, 'string'
 				assert.equal route.url, url
-				assert.equal route.controller, c
-				assert not route.pattern
 
-			'Route (c, \'/test\')': ->
-				c = {}
-				url = '/test'
-				route = Route c, url
+			pattern: ->
+				route = new Route pattern = /\/test/
 
-				assert route instanceof Route
-				assert.equal route.url, url
-				assert.equal route.controller, c
-				assert not route.pattern
-
-			'new Route (c, /test/)': ->
-				c = {}
-				pattern = /\/test/
-				route = new Route c, pattern
-
-				assert route instanceof Route
+				assert.instanceOf route, Route
 				assert.equal route.pattern, pattern
-				assert.equal route.controller, c
-				assert not route.url
 
-			'new Route (c, {})': ->
-				c = {}
-				url = '/test'
-				options = { url: url }
-				route = new Route c, options
+			options: ->
+				route = new Route pattern = /\/test/, options = methods: ['GET']
 
-				assert route instanceof Route
-				assert.equal route.url, url
-				assert.equal route.controller, c
-				assert not route.pattern
-
-			'new Route (c)': ->
-				c = {}
-				route = new Route c
-
-				assert route instanceof Route
-				assert.equal route.controller, c
-				assert not route.url
-				assert not route.pattern
-
-			'new Route (c, #null)': ->
-				ok = false
-
-				try
-					route = new Route {}, null
-				catch error
-					assert error instanceof Error
-					ok = true
-				finally
-					assert ok
-
-			'new Route (c, #function)': ->
-				ok = false
-
-				try
-					route = new Route {}, ->
-				catch error
-					assert error instanceof Error
-					ok = true
-				finally
-					assert ok
-
-			'Route.from(#url)': ->
-				route = new Route {}
-				url = '/test/'
-
-				assert.equal route.from(url), route
-				assert.equal route.url, url
-				assert not route.pattern
-
-			'Route.from(#pattern)': ->
-				route = new Route {}
-				pattern = /test/
-
-				assert.equal route.from(pattern), route
+				assert.instanceOf route, Route
 				assert.equal route.pattern, pattern
-				assert not route.url
+				assert.deepEqual route.methods, GET: yes
 
-			'Route.from(#object)': ->
-				ok = false
-				route = new Route {}
+		from:
+			string: ->
+				(route = new Route)
+					.from url = '/test/'
 
-				try
-					route.from {}
-				catch error
-					assert error instanceof Error
-					ok = true
-				finally
-					assert ok
+				assert.equal route.url, url
 
-			'Route.from(#null)': ->
-				ok = false
-				route = new Route {}
+			pattern: ->
+				(route = new Route)
+					.from pattern = /test/
 
-				try
-					route.from null
-				catch error
-					assert error instanceof Error
-					ok = true
-				finally
-					assert ok
+				assert.equal route.pattern, pattern
 
-			'Route.from(#undefined)': ->
-				ok = true
-				route = new Route {},
-					url: 'test'
-
-				try
-					route.from()
-				catch  error
-					ok = false
-				finally
-					assert ok
-
-				assert not route.url
-				assert not route.pattern
-
-			'Route.to(#undefined)': ->
-				ok = false
-				route = new Route {}, '/test'
-
-				try
-					route.to undefined
-				catch error
-					assert error instanceof Error
-					ok = true
-				finally
-					assert ok
-
-			'Route.to(#null)': ->
-				ok = false
-				route = new Route {}, /test/
-
-				try
-					route.to null
-				catch error
-					assert error instanceof Error
-					ok = true
-				finally
-					assert ok
-
-			'Route.to(#function)': ->
-				ok = false
-				callback = ->
+			invalid: ->
 				route = new Route
-					_route: (source, destination) ->
-						ok = true
-						assert.equal destination, callback
 
-						assert source instanceof Route
-						assert.notEqual source, route
+				assert.throws -> route.from null
+				assert.throws -> route.from {}
+				assert.throws -> route.from []
+				assert.throws -> route.from ->
 
-				assert.equal route.from('test').to(callback), route
-				assert ok
+			undefined: ->
+				(route = new Route '/')
+					.from()
 
-			'Route.from(#undefined).to(#function)': ->
-				ok = false
-				route = new Route {}
+				assert.isUndefined route.url
+				assert.isUndefined route.pattern
 
-				try
-					route.to ->
-				catch error
-					assert error instanceof Error
-					ok = true
-				finally
-					assert ok
+		set:
+			invalid: ->
+				route = new Route
 
-			'Route.set(#null)': ->
-				ok = false
-				route = new Route {}
+				assert.throws -> route.set null
+				assert.throws -> route.set ->
 
-				try
-					route.set null
-				catch error
-					assert error instanceof Error
-					ok = true
-				finally
-					assert ok
+				assert.throws -> route.set methods: null
+				assert.throws -> route.set methods: ->
 
-			'Route.set(#function)': ->
-				ok = false
-				route = new Route {}
+			array: ->
+				(route = new Route)
+					.set methods: ['HEAD', 'POST']
 
-				try
-					route.set ->
-				catch error
-					assert error instanceof Error
-					ok = true
-				finally
-					assert ok
+				assert.isObject route.methods
 
-			'Route.set(#object)': ->
-				ok = false
-				route = new Route {}
+				assert.isTrue route.methods.POST
+				assert.isTrue route.methods.HEAD
 
-				# Url
-				assert.equal route.set({ url: 'test' }), route
-				assert.equal route.url, 'test'
-				assert not route.pattern
+			undefined: ->
+				(route = new Route)
+					.set methods: ['HEAD', 'POST']
+					.set methods: undefined
 
-				# Pattern
-				assert.equal route.set({ pattern: /test/ }), route
-				assert route.pattern.test 'test'
-				assert not route.url
+				assert.isUndefined route.methods
 
-				# Objectified property
-				assert.equal route.set({ methods: 'GET' }), route
-				assert.equal typeof route.methods, 'object'
-				assert.equal Object.keys(route.methods).length, 1
-				assert route.methods['GET']
+		unset:
+			string: ->
+				(route = new Route '/')
+					.unset 'url'
 
-				# Array
-				assert.equal route.set({ methods: ['HEAD', 'POST'] }), route
-				assert.equal typeof route.methods, 'object'
-				assert.equal Object.keys(route.methods).length, 2
-				assert route.methods['POST']
-				assert route.methods['HEAD']
+				assert.isUndefined route.url
 
-				# Object
-				assert.equal route.set({ methods: {'PUT': true, 'DELETE': true } }), route
-				assert.equal typeof route.methods, 'object'
-				assert.equal Object.keys(route.methods).length, 2
-				assert route.methods['PUT']
-				assert route.methods['DELETE']
+			array: ->
+				(route = new Route '/', methods: ['GET', 'POST'])
+					.unset ['url', 'methods']
 
-				# Wrong type for objectified
-				try
-					route.set
-						methods: ->
-				catch error
-					assert error instanceof Error
-					ok = true
-				finally
-					assert ok
+				assert.isUndefined route.url
+				assert.isUndefined route.methods
 
-				ok = false
+			null: ->
+				assert.throws -> new Route.unset null
 
-				try
-					route.set
-						methods: null
-				catch error
-					assert error instanceof Error
-					ok = true
-				finally
-					assert ok
+			undefined: ->
+				assert.throws -> new Route.unset()
 
-				# Objectified property undefined
-				assert.equal route.set({ methods: undefined }), route
-				assert not route.methods
+			object: ->
+				assert.throws -> new Route.unset methods: yes
 
-				# Plain property undefined
-				assert.equal route.set({ url: undefined }), route
-				assert not route.url
-				assert not route.pattern
+		match:
+			null: ->
+				assert.throws -> new Route.match null
 
-			'Route.unset(#string)': ->
-				ok = false
-				route = new Route {}, 'test'
-
-				assert.equal route.unset('url'), route
-				assert not route.url
-				assert not route.pattern
-
-				route = new Route {}, /test/
-				assert.equal route.unset('pattern'), route
-				assert not route.url
-				assert not route.pattern
-
-			'Route.unset(#array)': ->
-				ok = false
-				route = new Route {}, 'test'
-
-				route.set url: 'test'
-				route.set methods: ['GET', 'POST']
-
-				assert.equal route.unset(['url', 'methods', 'pattern']), route
-
-				assert not route.url
-				assert not route.methods
-				assert not route.pattern
-
-			'Route.unset(#null)': ->
-				ok = false
-				route = new Route {}
-
-				try
-					route.unset null
-				catch error
-					assert error instanceof Error
-					ok = true
-				finally
-					assert ok
-
-			'Route.unset(#undefined)': ->
-				ok = false
-				route = new Route {}
-
-				try
-					route.unset()
-				catch error
-					assert error instanceof Error
-					ok = true
-				finally
-					assert ok
-
-			'Route.unset(#object)': ->
-				ok = false
-				route = new Route {}
-
-				try
-					route.unset { 1: 'methods' }
-				catch error
-					assert error instanceof Error
-					ok = true
-				finally
-					assert ok
-
-			'Route.match(#null)': ->
-				ok = false
-				route = new Route {}
-
-				try
-					route.match null
-				catch error
-					assert error instanceof Error
-					ok = true
-				finally
-					assert ok
-
-			'Route.match(#empty)': ->
-				route = new Route {}
+			empty: ->
+				route = new Route
 
 				# Empty route always matches
-				assert route.match {}
-				assert route.match { method: 'HEAD' }
-				assert route.match { host: 'localhost' }
+				assert.isTrue route.match {}
+				assert.isTrue route.match method: 'HEAD'
+				assert.isTrue route.match host: 'localhost'
 
-			'Route.match(#methods)': ->
-				route = new Route({}).set
-					methods: ['GET', 'POST']
+			method: ->
+				route = new Route undefined, methods: ['GET', 'POST']
 
-				assert route.match { method: 'GET' }
-				assert route.match { method: 'POST' }
-				assert not route.match {}
-				assert not route.match { method: 'HEAD' }
-				assert not route.match { host: 'localhost' }
+				assert.isTrue route.match method: 'GET'
+				assert.isTrue route.match method: 'POST'
 
-			'Route.match(#hosts)': ->
-				route = new Route({}).set
-					hosts: ['microsoft.com', 'apple.com', 'kernel.org']
+				assert.isFalse route.match {}
+				assert.isFalse route.match method: 'HEAD'
+				assert.isFalse route.match host: 'localhost'
 
-				assert route.match { host: 'microsoft.com' }
-				assert route.match { host: 'apple.com' }
-				assert route.match { host: 'kernel.org' }
-				assert not route.match {}
-				assert not route.match { method: 'HEAD' }
-				assert not route.match { host: 'localhost' }
+			host: ->
+				route = new Route undefined, hosts: ['microsoft.com', 'apple.com', 'kernel.org']
 
-			'Route.match(#pattern|simple)': ->
-				route = new Route({}).set
-					pattern: /\/test\/123|456\/ok/
+				assert.isTrue route.match host: 'microsoft.com'
+				assert.isTrue route.match host: 'apple.com'
+				assert.isTrue route.match host: 'kernel.org'
 
-				context1 = url: '/test/123/ok'
-				context2 = url: '/test/761/ok'
-				context3 = url: '/test'
+				assert.isFalse route.match {}
+				assert.isFalse route.match { method: 'HEAD' }
+				assert.isFalse route.match { host: 'localhost' }
 
-				assert  route.match(context1)
-				assert !route.match(context2)
-				assert !route.match(context3)
+			pattern: ->
+				route = new Route /\/test\/123|456\/ok/
 
-			'Route.match(#pattern|mapping)': ->
-				route = new Route({}).set
-					pattern: /\/test\/(123|456)\/ok/
+				assert.isTrue  route.match url: '/test/123/ok'
+				assert.isFalse route.match url: '/test/761/ok'
+				assert.isFalse route.match url: '/test'
+
+			mapping: ->
+				route = new Route /\/test\/(123|456)\/ok/,
 					mapping:
 						$1: 'number'
+
+				assert.isTrue route.match url: '/test/123/ok', params: {}
+				assert.isTrue route.match url: '/test/456/ok', params: {}
+				assert.isTrue route.match url: '/test/456/ok', method: 'GET', params: {}
+
+				assert.isFalse route.match params: {}
+				assert.isFalse route.match hostname: 'localhost', params: {}
+				assert.isFalse route.match url: '/test/13/ok', params: {}
+				assert.isFalse route.match url: 'test/456/ok', params: {}
 
 				context =
 					params: {}
 					url: '/test/123/ok'
 
-				assert route.match { url: '/test/123/ok', params: {} }
-				assert route.match { url: '/test/456/ok', params: {} }
-				assert route.match { url: '/test/456/ok', method: 'GET', params: {} }
-				assert not route.match { params: {} }
-				assert not route.match { hostname: 'localhost', params: {} }
-				assert not route.match { url: '/test/13/ok', params: {} }
-				assert not route.match { url: 'test/456/ok', params: {} }
-
-				assert route.match(context)
+				assert route.match context
 				assert.equal context.params.number, '123'
-				assert not context.params.$1
-				assert not context.params.$2
+				assert.isUndefined context.params.$1
+				assert.isUndefined context.params.$2
 
 				context =
 					params: {}
 					url: '/test/456/ok'
 
-				route.set mapping: $1: 'test'
+				route.set
+					mapping:
+						$1: 'test'
 
-				assert route.match(context)
+				assert route.match context
 				assert.equal context.params.test, '456'
-				assert not context.params.number
-				assert not context.params.$1
-				assert not context.params.$2
 
-			'Route.match(#types)': ->
-				route = new Route({}).set
-					types: ['text/html', 'text/text']
+				assert.isUndefined context.params.number
+				assert.isUndefined context.params.$1
+				assert.isUndefined context.params.$2
 
-				assert route.match { types: ['text/html'] }
-				assert route.match { types: ['text/text'] }
-				assert route.match { types: ['html/html', 'text/text'] }
-				assert route.match { types: ['text/text', 'html/html'] }
-				assert route.match { types: ['text/text', 'text/html'] }
-				assert route.match { types: ['text/*'] }
-				assert route.match { types: ['text/plain', '*/*'] }
+			types: ->
+				route = new Route undefined, types: ['text/html', 'text/text']
 
-				assert not route.match { types: [] }
-				assert not route.match { types: ['application/json'] }
-				assert not route.match { types: ['application/json', 'html/html'] }
+				assert.isTrue route.match types: ['text/html']
+				assert.isTrue route.match types: ['text/text']
+				assert.isTrue route.match types: ['html/html', 'text/text']
+				assert.isTrue route.match types: ['text/text', 'html/html']
+				assert.isTrue route.match types: ['text/text', 'text/html']
+				assert.isTrue route.match types: ['text/*']
+				assert.isTrue route.match types: ['text/plain', '*/*']
 
-			'Route.copy(#full)': ->
-				route = new Route({}).set
-					url     : '/test'
-					methods : ['GET', 'POST']
-					hosts   : ['apple.com', 'microsoft.com']
+				assert.isFalse route.match types: []
+				assert.isFalse route.match types: ['application/*']
+				assert.isFalse route.match types: ['application/json']
+				assert.isFalse route.match types: ['application/json', 'html/html']
 
-				copy = route.copy()
-
-				assert copy instanceof Route
-				assert.notEqual copy, route
-				assert not copy.types
-				assert not copy.pattern
-
-				assert.deepEqual copy.methods, route.methods
-				assert.deepEqual copy.hosts,   route.hosts
-
-			'Route.copy(#empty)': ->
-				route = new Route {}
-				copy = route.copy()
-
-				assert copy instanceof Route
-				assert.notEqual copy, route
-
-				for field in ['methods', 'hosts', 'types', 'url', 'pattern', 'capture']
-					assert.equal copy[field], route[field]
-					assert not copy[field]
-					assert not route[field]
 	.export module

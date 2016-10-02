@@ -21,7 +21,7 @@ parts = ['alpha', 'bravo4_03', '_-_5690_i-', '+', '55']
 			one: ->
 				route = Crixalis
 					.route('/:item/list', dummy)
-					._routes.pop()
+					._routes.pop()[0]
 
 				for item in parts
 					context =
@@ -34,7 +34,7 @@ parts = ['alpha', 'bravo4_03', '_-_5690_i-', '+', '55']
 			two: ->
 				route = Crixalis
 					.route('/:item/:action', dummy)
-					._routes.pop()
+					._routes.pop()[0]
 
 				for item in parts
 					for action in parts
@@ -49,7 +49,7 @@ parts = ['alpha', 'bravo4_03', '_-_5690_i-', '+', '55']
 			escape: ->
 				route = Crixalis
 					.route('/([^\/]+)/:action', dummy)
-					._routes.pop()
+					._routes.pop()[0]
 
 				for item in parts
 					for action in parts
@@ -60,7 +60,7 @@ parts = ['alpha', 'bravo4_03', '_-_5690_i-', '+', '55']
 			invalid: ->
 				route = Crixalis
 					.route('/([^\\//:action', dummy)
-					._routes.pop()
+					._routes.pop()[0]
 
 				for item in parts
 					for action in parts
@@ -72,7 +72,7 @@ parts = ['alpha', 'bravo4_03', '_-_5690_i-', '+', '55']
 			negative: ->
 				route = Crixalis
 					.route('/test/:item', dummy)
-					._routes.pop()
+					._routes.pop()[0]
 
 				for item in parts
 					for action in parts
@@ -88,7 +88,7 @@ parts = ['alpha', 'bravo4_03', '_-_5690_i-', '+', '55']
 			'asterisk#middle': ->
 				route = Crixalis
 					.route('/*/alpha', dummy)
-					._routes.pop()
+					._routes.pop()[0]
 
 				for item in parts
 					for action in parts
@@ -102,7 +102,7 @@ parts = ['alpha', 'bravo4_03', '_-_5690_i-', '+', '55']
 			'asterisk#end': ->
 				route = Crixalis
 					.route('/alpha/*', dummy)
-					._routes.pop()
+					._routes.pop()[0]
 
 				for item in parts
 					for action in parts
@@ -116,7 +116,7 @@ parts = ['alpha', 'bravo4_03', '_-_5690_i-', '+', '55']
 			'asterisk#double': ->
 				route = Crixalis
 					.route('/*/test/*', dummy)
-					._routes.pop()
+					._routes.pop()[0]
 
 				for item in parts
 					for action in parts
@@ -131,7 +131,7 @@ parts = ['alpha', 'bravo4_03', '_-_5690_i-', '+', '55']
 			everything: ->
 				route = Crixalis
 					.route('*', dummy)
-					._routes.pop()
+					._routes.pop()[0]
 
 				for item in parts
 					for action in parts
@@ -142,7 +142,7 @@ parts = ['alpha', 'bravo4_03', '_-_5690_i-', '+', '55']
 			tail: ->
 				route = Crixalis
 					.route('*/:tail', dummy)
-					._routes.pop()
+					._routes.pop()[0]
 
 				for item in parts
 					for action in parts
