@@ -51,10 +51,12 @@ catch error
 				stat = fs.statSync(__filename)
 
 				assert.notEqual result.headers['content-length'], stat.size
+
 				assert.equal result.headers['content-length'], result.message.length
 				assert.equal result.headers['last-modified'], stat.mtime.toUTCString()
 				assert.equal result.headers['content-type'], 'application/javascript; charset=utf-8'
 				assert.equal result.headers['content-encoding'], 'gzip'
 				assert.equal result.headers.vary, 'Accept-Encoding'
+				assert.match result.headers.etag, /^"[a-z0-9\/+]+-g"$/i
 
 	.export(module)
