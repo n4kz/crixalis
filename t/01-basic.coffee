@@ -32,7 +32,6 @@ EventEmitter = require('events').EventEmitter
 					'error',
 					'redirect',
 					'cookie',
-					'chain',
 					'define',
 					'start'
 				]
