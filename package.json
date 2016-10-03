@@ -4,7 +4,7 @@
 	"description": "Lightweight web framework",
 	"main": "lib/controller.js",
 	"license": "LGPL-3.0",
-	"keywords": ["framework", "rest", "web", "server", "http", "static", "less", "coffee", "coffee-script", "jade"],
+	"keywords": ["framework", "rest", "web", "server", "http", "static"],
 	"author": {
 		"name": "Alexander Nazarov",
 		"email": "n4kz@n4kz.com"
