@@ -15,18 +15,6 @@ plugins =
 		compression: 'function'
 		defaultCompression: 'string'
 
-	jade:
-		jade: 'function'
-		jadePath: 'string'
-
-	coffee:
-		coffee: 'function'
-
-	less:
-		less: 'function'
-
-	# processor is not listed here (is not a plugin but a plugin generator)
-
 try
 	require 'jade'
 catch error
