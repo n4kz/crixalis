@@ -41,7 +41,7 @@ Crixalis
 				assert.equal result.headers.vary, 'Accept-Encoding'
 				assert.match result.headers.etag, /^"[a-z0-9\/+]+"$/i
 
-		'ifmodsince#200':
+		ifmodsince200:
 			topic: ->
 				params =
 					host: 'localhost'
@@ -69,7 +69,7 @@ Crixalis
 				assert.equal result.headers.vary, 'Accept-Encoding'
 				assert.match result.headers.etag, /^"[a-z0-9\/+]+"$/i
 
-		'ifmodsince#304':
+		ifmodsince304:
 			topic: ->
 				params =
 					host: 'localhost'
@@ -85,15 +85,13 @@ Crixalis
 			result:  (error, result) -> assert.equal result.statusCode, 304
 			body:    (error, result) -> assert.equal result.message.toString(), ''
 			headers: (error, result) ->
-				stat = fs.statSync(__filename)
-
-				assert.equal result.headers['last-modified'], stat.mtime.toUTCString()
-
-				assert.isUndefined result.headers.vary
+				assert.isUndefined result.headers['vary']
 				assert.isUndefined result.headers['content-type']
 				assert.isUndefined result.headers['content-length']
+				assert.isUndefined result.headers['last-modified']
+				assert.isUndefined result.headers['etag']
 
-		'ifnonematch#200':
+		ifnonematch200:
 			topic: ->
 				params =
 					host: 'localhost'
@@ -121,7 +119,7 @@ Crixalis
 				assert.equal result.headers.vary, 'Accept-Encoding'
 				assert.match result.headers.etag, /^"[a-z0-9\/+]+"$/i
 
-		'ifnonematch#304':
+		ifnonematch304:
 			topic: ->
 				params =
 					host: 'localhost'
@@ -140,12 +138,10 @@ Crixalis
 			result:  (error, result) -> assert.equal result.statusCode, 304
 			body:    (error, result) -> assert.equal result.message.toString(), ''
 			headers: (error, result) ->
-				stat = fs.statSync(__filename)
-
-				assert.equal result.headers['last-modified'], stat.mtime.toUTCString()
-
-				assert.isUndefined result.headers.vary
+				assert.isUndefined result.headers['vary']
 				assert.isUndefined result.headers['content-type']
 				assert.isUndefined result.headers['content-length']
+				assert.isUndefined result.headers['last-modified']
+				assert.isUndefined result.headers['etag']
 
 	.export(module)
