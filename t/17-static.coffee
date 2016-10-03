@@ -39,8 +39,9 @@ Crixalis
 				assert.equal result.headers['content-length'], stat.size
 				assert.equal result.headers['content-type'], 'application/javascript; charset=utf-8'
 				assert.equal result.headers.vary, 'Accept-Encoding'
+				assert.match result.headers.etag, /^"[a-z0-9\/+]+"$/i
 
-		'modified#200':
+		'ifmodsince#200':
 			topic: ->
 				params =
 					host: 'localhost'
@@ -66,8 +67,9 @@ Crixalis
 				assert.equal result.headers['content-length'], stat.size
 				assert.equal result.headers['content-type'], 'application/javascript; charset=utf-8'
 				assert.equal result.headers.vary, 'Accept-Encoding'
+				assert.match result.headers.etag, /^"[a-z0-9\/+]+"$/i
 
-		'modified#304':
+		'ifmodsince#304':
 			topic: ->
 				params =
 					host: 'localhost'
@@ -86,8 +88,64 @@ Crixalis
 				stat = fs.statSync(__filename)
 
 				assert.equal result.headers['last-modified'], stat.mtime.toUTCString()
-				assert !('vary' of result.headers)
-				assert !('content-type' of result.headers)
-				assert !('content-length' of result.headers)
+
+				assert.isUndefined result.headers.vary
+				assert.isUndefined result.headers['content-type']
+				assert.isUndefined result.headers['content-length']
+
+		'ifnonematch#200':
+			topic: ->
+				params =
+					host: 'localhost'
+					port: port
+					path:  __filename.replace(/^.*(?=\/)/, '')
+					headers:
+						'if-none-match': '"4BNTmsHehOy7XICcRxsQYMcArjc", "FS3sEHdTbkvJzbQey/ZzZH93h08"'
+
+				Crixalis.request(params, @callback)
+				return
+
+			error:  (error, result) -> assert.equal error, null
+			result: (error, result) -> assert.equal result.statusCode, 200
+
+			body: (error, result) ->
+				assert.equal result.message.length, fs.statSync(__filename).size
+				assert.equal result.message.toString(), fs.readFileSync(__filename)
+
+			headers: (error, result) ->
+				stat = fs.statSync(__filename)
+
+				assert.equal result.headers['last-modified'], stat.mtime.toUTCString()
+				assert.equal result.headers['content-length'], stat.size
+				assert.equal result.headers['content-type'], 'application/javascript; charset=utf-8'
+				assert.equal result.headers.vary, 'Accept-Encoding'
+				assert.match result.headers.etag, /^"[a-z0-9\/+]+"$/i
+
+		'ifnonematch#304':
+			topic: ->
+				params =
+					host: 'localhost'
+					port: port
+					path:  __filename.replace(/^.*(?=\/)/, '')
+					headers: {}
+
+				Crixalis.request params, (error, result) =>
+					params.headers['if-none-match'] = result.headers.etag
+
+					Crixalis.request(params, @callback)
+
+				return
+
+			error:   (error, result) -> assert.equal error, null
+			result:  (error, result) -> assert.equal result.statusCode, 304
+			body:    (error, result) -> assert.equal result.message.toString(), ''
+			headers: (error, result) ->
+				stat = fs.statSync(__filename)
+
+				assert.equal result.headers['last-modified'], stat.mtime.toUTCString()
+
+				assert.isUndefined result.headers.vary
+				assert.isUndefined result.headers['content-type']
+				assert.isUndefined result.headers['content-length']
 
 	.export(module)
