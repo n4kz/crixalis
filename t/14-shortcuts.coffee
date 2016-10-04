@@ -1,6 +1,6 @@
 assert   = require 'assert'
-fetch    = require './lib/fetch.js'
-Crixalis = require '../lib/controller.js'
+fetch    = require './lib/fetch'
+Crixalis = require '../lib'
 
 port = +process.env.CRIXALIS_PORT + 14
 
@@ -96,4 +96,4 @@ request = (options) ->
 					method: 'PUT'
 					url: '/methods/E'
 
-	.export module
+	.export(module)

@@ -1,14 +1,13 @@
 assert   = require 'assert'
 http     = require 'http'
 vows     = require 'vows'
-fetch    = require './lib/fetch.js'
-copy     = require './lib/copy.js'
-Crixalis = require '../lib/controller.js'
+fetch    = require './lib/fetch'
+copy     = require './lib/copy'
 port     = +process.env.CRIXALIS_PORT + 6
+Crixalis = require '../lib'
 
 Crixalis
 	.route '/', methods: ['GET', 'POST'], ->
-		assert @is_get
 		assert.equal typeof @params, 'object'
 		assert.equal Object.keys(@params).length, 0
 
@@ -16,7 +15,6 @@ Crixalis
 		return
 
 	.route '/get', methods: ['GET', 'POST'], ->
-		assert @is_get
 		assert.equal @params.p1, 1
 		assert.equal @params.p2, 2
 		assert.equal @params.p3, 3
@@ -26,7 +24,6 @@ Crixalis
 		return
 
 	.route '/post', methods: ['GET', 'POST'], ->
-		assert @is_post
 		assert.equal @params.p1, 3
 		assert.equal @params.p2, 1
 		assert.equal @params.p3, 2
@@ -36,7 +33,6 @@ Crixalis
 		return
 
 	.route '/post4', methods: ['GET', 'POST'], ->
-		assert @is_post
 		assert.equal Object.keys(@params).length, 3
 		@body = [@params.p1, @params.p2, @params.p3].join(' ')
 
@@ -50,7 +46,6 @@ Crixalis
 		return
 
 	.route '/octet', methods: ['GET', 'POST'], ->
-		assert @is_post
 		assert @message
 		assert.equal @message.type, 'application/octet-stream'
 		@body = @message.data
@@ -59,7 +54,6 @@ Crixalis
 		return
 
 	.route '/json', methods: ['GET', 'POST'], ->
-		assert @is_post
 		assert @message
 		assert.equal @message.type, 'application/json'
 		@body = @message.data.text

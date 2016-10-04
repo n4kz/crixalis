@@ -1,12 +1,14 @@
 assert   = require 'assert'
-fetch    = require './lib/fetch.js'
-Crixalis = require '../lib/controller.js'
+fetch    = require './lib/fetch'
+Crixalis = require '../lib'
 
 port = +process.env.CRIXALIS_PORT + 15
 
 Crixalis
 	.start 'http', port
 	.unref()
+
+# TODO: Indirect access
 
 dummy = ->
 
@@ -153,4 +155,4 @@ parts = ['alpha', 'bravo4_03', '_-_5690_i-', '+', '55']
 						assert route.match context
 						assert.equal context.params.tail, action
 
-	.export module
+	.export(module)

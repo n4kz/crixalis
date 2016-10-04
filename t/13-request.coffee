@@ -1,7 +1,7 @@
 assert   = require 'assert'
-fetch    = require './lib/fetch.js'
-Crixalis = require '../lib/controller.js'
-qs       = require('querystring').stringify
+QS       = require 'querystring'
+fetch    = require './lib/fetch'
+Crixalis = require '../lib'
 
 port  = +process.env.CRIXALIS_PORT + 13
 parse = JSON.parse
@@ -48,7 +48,7 @@ request = (options) ->
 	.addBatch
 		'http get':
 			topic: request
-				path: '/?' + qs
+				path: '/?' + QS.stringify
 					path: '/mirror?magic=1'
 					method: 'GET'
 					port: port
@@ -68,7 +68,7 @@ request = (options) ->
 
 		'http post#form':
 			topic: request
-				path: '/?' + qs
+				path: '/?' + QS.stringify
 					path: '/mirror?magic=1'
 					method: 'POST'
 					port: port
@@ -93,7 +93,7 @@ request = (options) ->
 
 		'http post#json':
 			topic: request
-				path: '/?' + qs
+				path: '/?' + QS.stringify
 					path: '/mirror?magic=1'
 					method: 'POST'
 					port: port
@@ -119,7 +119,7 @@ request = (options) ->
 
 		'http post#custom':
 			topic: request
-				path: '/?' + qs
+				path: '/?' + QS.stringify
 					path: '/mirror?magic=1'
 					method: 'POST'
 					port: port

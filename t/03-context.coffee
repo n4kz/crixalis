@@ -1,8 +1,8 @@
-Crixalis = require '../lib/controller.js'
-fetch    = require './lib/fetch.js'
 assert   = require 'assert'
-port     = +process.env.CRIXALIS_PORT + 3
 QS       = require 'querystring'
+fetch    = require './lib/fetch'
+port     = +process.env.CRIXALIS_PORT + 3
+Crixalis = require '../lib'
 
 ck1  = '5e91faa3a8a30ee154f'
 ck2  = '1477746269'

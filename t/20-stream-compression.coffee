@@ -1,8 +1,8 @@
-Crixalis = require '../lib/controller.js'
 assert   = require 'assert'
 port     = +process.env.CRIXALIS_PORT + 20
 zlib     = require 'zlib'
 fs       = require 'fs'
+Crixalis = require '../lib'
 
 Crixalis
 	.plugin('compression')

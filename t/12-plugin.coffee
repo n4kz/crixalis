@@ -1,5 +1,5 @@
 assert   = require 'assert'
-Crixalis = require '../lib/controller.js'
+Crixalis = require '../lib'
 
 plugins =
 	request:
@@ -14,16 +14,6 @@ plugins =
 	compression:
 		compression: 'function'
 		defaultCompression: 'string'
-
-try
-	require 'jade'
-catch error
-	delete plugins.jade
-
-try
-	require 'less'
-catch error
-	delete plugins.less
 
 plan = ->
 	result =
@@ -78,4 +68,4 @@ plan = ->
 				assert.throws ->
 					Crixalis.plugin(__dirname + '/lib/module')
 
-	.export module
+	.export(module)

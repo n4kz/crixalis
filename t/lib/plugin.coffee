@@ -1,6 +1,7 @@
-Crixalis = require('../../lib/controller')
 i = 0
 
 module.exports = (options) ->
-	Crixalis.define 'method', 'plugin_' + ++i, ->
+	this.define 'plugin_' + ++i, ->
 		return options
+
+	return

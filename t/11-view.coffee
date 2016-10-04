@@ -1,11 +1,10 @@
 assert   = require 'assert'
-fetch    = require './lib/fetch.js'
-copy     = require './lib/copy.js'
-Crixalis = require '../lib/controller.js'
+fetch    = require './lib/fetch'
+copy     = require './lib/copy'
 today    = (new Date()).toUTCString().slice(0, 16)
+status   = require('http').STATUS_CODES
 port     = +process.env.CRIXALIS_PORT + 11
-
-status = require('http').STATUS_CODES
+Crixalis = require '../lib'
 
 Crixalis
 	.route '/', methods: ['GET'], ->
@@ -136,4 +135,4 @@ topic = (options) ->
 					body: (error, response) ->
 						assert.equal response.body, status[302]
 
-	.export module
+	.export(module)

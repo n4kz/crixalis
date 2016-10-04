@@ -1,9 +1,11 @@
 assert   = require 'assert'
 vows     = require 'vows'
-copy     = require './lib/copy.js'
-fetch    = require './lib/fetch.js'
-Crixalis = require '../lib/controller.js'
+copy     = require './lib/copy'
+fetch    = require './lib/fetch'
 port     = +process.env.CRIXALIS_PORT + 4
+Crixalis = require '../lib'
+
+# TODO: Use multiple instances
 
 hmn = ->
 	assert Array.isArray @events, 'event array not exists'
@@ -47,10 +49,11 @@ hmc = ->
 
 ha = ->
 	assert not Array.isArray @events, 'events array exists'
+
 	@events      = ['auto']
 	@code        = 200
 	@body        = @url.replace /^.*\//, ''
-	@name        = @body
+	@stash.name  = @body
 
 	@select()
 
@@ -80,7 +83,9 @@ hc = ->
 
 	return
 
-Crixalis.start 'http', port
+Crixalis
+	.plugin 'compression'
+	.start 'http', port
 	.unref()
 
 vows
@@ -99,12 +104,11 @@ vows
 					assert.equal result.statusCode, 200, 'code 200'
 
 					unless --remains
-						@callback true, responses
+						@callback null, responses
 
 					return
 
 				# Load compression plugin
-				Crixalis.plugin 'compression'
 
 				# Add some routes
 				Crixalis
@@ -118,9 +122,8 @@ vows
 				Crixalis.on 'response', hr
 				Crixalis.on 'error', he
 				Crixalis.on 'compression', hc
-				Crixalis.on 'destroy', ->
-					hs.call @
-					responses[@name] = @events
+				Crixalis.on 'destroy', hs
+				Crixalis.on 'destroy', -> responses[@stash.name] = @events
 
 				endpoints = [
 					'normal',
@@ -134,8 +137,9 @@ vows
 					options = copy params
 					options.path = '/match/' + path
 
-					options.headers =
-						'accept-encoding': 'gzip'
+					if /compression/.test path
+						options.headers =
+							'accept-encoding': 'gzip'
 
 					fetch options, cb
 

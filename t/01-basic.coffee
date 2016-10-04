@@ -1,6 +1,6 @@
-assert       = require('assert')
-Crixalis     = require('../lib/controller.js')
+assert       = require 'assert'
 EventEmitter = require('events').EventEmitter
+Crixalis     = require '../lib'
 
 (require 'vows')
 	.describe('params')
@@ -8,9 +8,14 @@ EventEmitter = require('events').EventEmitter
 		require:
 			topic: null
 
-			constructor: ->
+			inheritance: ->
 				assert.instanceOf Crixalis, Crixalis.constructor
 				assert.instanceOf Crixalis, EventEmitter
+
+				assert.isFalse Crixalis.propertyIsEnumerable('constructor')
+
+			constructor: ->
+				assert.equal Crixalis.constructor, require('../lib/crixalis')
 
 			properties: ->
 				assert.equal Crixalis.version, require('../package').version
@@ -23,27 +28,54 @@ EventEmitter = require('events').EventEmitter
 
 			methods: ->
 				methods = [
-					'createContext',
-					'route',
-					'sendHeaders',
+					# Protected
+					'define',
 					'plugin',
+					'route',
 					'select',
 					'render',
+					'createContext',
+					'has',
+
+					# Private
+					'destroyContext',
+					'sendResponse',
+
+					# Public
+					'sendHeaders',
 					'error',
-					'redirect',
+					'start',
 					'cookie',
-					'define',
-					'start'
+					'redirect'
 				]
 
 				for method in methods
 					assert.isFunction Crixalis[method]
+					assert.isFalse Crixalis.propertyIsEnumerable(method)
 
-			private: ->
-				assert.isObject   Crixalis._views
-				assert.isArray    Crixalis._routes
-				assert.isFunction Crixalis._route
-				assert.isFunction Crixalis._response
-				assert.isFunction Crixalis._destroy
+			events: ->
+				events = [
+					'auto',
+					'error',
+					'newListener'
+				]
 
-	.export module
+				for event in events
+					assert.isArray Crixalis.listeners(event)
+
+			define: ->
+				property = Object.create(null)
+				method   = new Function()
+
+				Crixalis.define('property', property)
+				Crixalis.define('method', method)
+
+				assert.isFunction Crixalis.method
+				assert.isFalse    Crixalis.propertyIsEnumerable('method')
+				assert.equal      Crixalis.method, method
+
+				assert.isObject Crixalis.property
+				assert.isTrue   Crixalis.propertyIsEnumerable('property')
+				assert.equal    Crixalis.property, property
+
+	.export(module)

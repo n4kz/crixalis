@@ -1,9 +1,8 @@
 assert   = require 'assert'
-vows     = require 'vows'
-fetch    = require './lib/fetch.js'
-copy     = require './lib/copy.js'
-Crixalis = require '../lib/controller.js'
+fetch    = require './lib/fetch'
+copy     = require './lib/copy'
 port     = +process.env.CRIXALIS_PORT + 7
+Crixalis = require '../lib'
 
 Crixalis
 	.route '/set', ->
@@ -57,7 +56,7 @@ Crixalis
 	.start 'http', port
 	.unref()
 
-vows
+(require 'vows')
 	.describe('cookies')
 	.addBatch
 		cookie:
@@ -69,8 +68,10 @@ vows
 			set:
 				topic: (topic) ->
 					params = copy topic
+
 					fetch params, @callback
-					undefined
+
+					return
 
 				response: (error, response) ->
 					assert not error
@@ -81,10 +82,12 @@ vows
 					params = copy topic
 					params.headers =
 						'Cookie': 'test=3124; foo=ok'
+
 					fetch params, @callback
-					undefined
+
+					return
 
 				response: (error, response) ->
 					assert not error
 					assert.equal response.statusCode, 200
-	.export module
+	.export(module)
