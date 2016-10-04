@@ -3,9 +3,10 @@ vows     = require 'vows'
 copy     = require './lib/copy'
 fetch    = require './lib/fetch'
 port     = +process.env.CRIXALIS_PORT + 4
-Crixalis = require '../lib'
+Crixalis = require '../lib/crixalis'
 
-# TODO: Use multiple instances
+CxA = new Crixalis()
+CxB = new Crixalis()
 
 hmn = ->
 	assert Array.isArray @events, 'event array not exists'
@@ -83,21 +84,25 @@ hc = ->
 
 	return
 
-Crixalis
+CxA
+	.start 'http', port + 0
+	.unref()
+
+CxB
 	.plugin 'compression'
-	.start 'http', port
+	.start 'http', port + 100
 	.unref()
 
 vows
 	.describe('events')
 	.addBatch
-		order:
+		normal:
 			topic: ->
 				responses = {}
 				remains   = 0
 				params    =
 					host: '127.0.0.1'
-					port: port
+					port: port + 0
 
 				cb = (error, result) =>
 					assert not error,                    'got result'
@@ -108,28 +113,26 @@ vows
 
 					return
 
-				# Load compression plugin
-
 				# Add some routes
-				Crixalis
+				CxA
 					.route('/match/normal', hmn)
 					.route('/match/error', hme)
 					.route('/match/compression', hmc)
 					.route('/match/ecompression', hmec)
 
 				# Setup new listeners
-				Crixalis.on 'auto', ha
-				Crixalis.on 'response', hr
-				Crixalis.on 'error', he
-				Crixalis.on 'compression', hc
-				Crixalis.on 'destroy', hs
-				Crixalis.on 'destroy', -> responses[@stash.name] = @events
+				CxA.on 'auto', ha
+				CxA.on 'response', hr
+				CxA.on 'error', he
+				CxA.on 'compression', hc
+				CxA.on 'destroy', hs
+				CxA.on 'destroy', -> responses[@stash.name] = @events
 
 				endpoints = [
 					'normal',
 					'error',
 					'compression',
-					'ecompression',
+					'ecompression'
 				]
 
 				for path in endpoints
@@ -155,10 +158,84 @@ vows
 
 			compression: (error, responses) ->
 				events = responses.compression
+				assert.deepEqual events, 'auto main response destroy'.split ' '
+
+			ecompression: (error, responses) ->
+				events = responses.ecompression
+				assert.deepEqual events, 'auto main error response destroy'.split ' '
+
+			feature: ->
+				assert.isFalse CxA.has('compression')
+
+		compression:
+			topic: ->
+				responses = {}
+				remains   = 0
+				params    =
+					host: '127.0.0.1'
+					port: port + 100
+
+				cb = (error, result) =>
+					assert not error,                    'got result'
+					assert.equal result.statusCode, 200, 'code 200'
+
+					unless --remains
+						@callback null, responses
+
+					return
+
+				# Add some routes
+				CxB
+					.route('/match/normal', hmn)
+					.route('/match/error', hme)
+					.route('/match/compression', hmc)
+					.route('/match/ecompression', hmec)
+
+				# Setup new listeners
+				CxB.on 'auto', ha
+				CxB.on 'response', hr
+				CxB.on 'error', he
+				CxB.on 'compression', hc
+				CxB.on 'destroy', hs
+				CxB.on 'destroy', -> responses[@stash.name] = @events
+
+				endpoints = [
+					'normal',
+					'error',
+					'compression',
+					'ecompression'
+				]
+
+				for path in endpoints
+					remains++
+					options = copy params
+					options.path = '/match/' + path
+
+					if /compression/.test path
+						options.headers =
+							'accept-encoding': 'gzip'
+
+					fetch options, cb
+
+				return
+
+			normal: (error, responses) ->
+				events = responses.normal
+				assert.deepEqual events, 'auto main compression response destroy'.split ' '
+
+			error: (error, responses) ->
+				events = responses.error
+				assert.deepEqual events, 'auto main error compression response destroy'.split ' '
+
+			compression: (error, responses) ->
+				events = responses.compression
 				assert.deepEqual events, 'auto main compression response destroy'.split ' '
 
 			ecompression: (error, responses) ->
 				events = responses.ecompression
 				assert.deepEqual events, 'auto main error compression response destroy'.split ' '
+
+			feature: ->
+				assert.isTrue CxB.has('compression')
 
 	.export module
