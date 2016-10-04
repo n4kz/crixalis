@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 'use strict';
 
-var Crixalis = require('crixalis'),
+var Crixalis = require('../lib/'),
 	optimist = require('optimist'),
 	system   = require('os'),
 	resolve  = require('path').resolve,
@@ -39,20 +39,6 @@ Crixalis
 	.plugin('static', { route: true })
 	.plugin('access')
 	.plugin('compression');
-
-/* Load less plugin if available */
-try {
-	require('less');
-	Crixalis.plugin('less');
-} catch (error) {
-}
-
-/* Load coffee-script plugin if available */
-try {
-	require('coffee-script');
-	Crixalis.plugin('coffee');
-} catch (error) {
-}
 
 Crixalis.staticPath = resolve(process.cwd(), argv.path);
 Crixalis.cachePath  = resolve(process.cwd(), argv.temp);
