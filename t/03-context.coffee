@@ -55,13 +55,6 @@ Crixalis
 			method: (context) ->
 				assert.equal context.method, 'GET'
 
-				assert.isTrue context.is_get
-
-				assert.isFalse context.is_head
-				assert.isFalse context.is_post
-				assert.isFalse context.is_put
-				assert.isFalse context.is_delete
-
 			host: (context) ->
 				assert.equal context.host, params.host
 
@@ -128,13 +121,6 @@ Crixalis
 			method: (context) ->
 				assert.equal context.method, 'POST'
 
-				assert.isTrue context.is_post
-
-				assert.isFalse context.is_head
-				assert.isFalse context.is_get
-				assert.isFalse context.is_put
-				assert.isFalse context.is_delete
-
 			host: (context) ->
 				assert.equal context.host, params.host
 
@@ -193,13 +179,6 @@ Crixalis
 
 			method: (context) ->
 				assert.equal context.method, 'POST'
-
-				assert.isTrue context.is_post
-
-				assert.isFalse context.is_head
-				assert.isFalse context.is_get
-				assert.isFalse context.is_put
-				assert.isFalse context.is_delete
 
 			host: (context) ->
 				assert.equal context.host, params.host
