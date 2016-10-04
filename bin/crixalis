@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 'use strict';
 
-var Crixalis = require('../lib/'),
+var Crixalis = require('../lib'),
 	optimist = require('optimist'),
 	system   = require('os'),
 	resolve  = require('path').resolve,
