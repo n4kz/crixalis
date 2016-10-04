@@ -2,7 +2,7 @@
 	"name": "crixalis",
 	"version": "0.5.5",
 	"description": "Lightweight web framework",
-	"main": "lib/controller.js",
+	"main": "lib/index.js",
 	"license": "LGPL-3.0",
 	"keywords": ["framework", "rest", "web", "server", "http", "static"],
 	"author": {
