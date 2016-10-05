@@ -21,7 +21,6 @@ Crixalis     = require '../lib'
 				assert.equal Crixalis.version, require('../package').version
 				assert.equal Crixalis.signature, 'Crixalis'
 				assert.equal Crixalis.postSize, 1 << 20
-				assert.equal Crixalis.view, 'html'
 				assert.equal Crixalis.code, 0
 				assert.equal Crixalis.body, ''
 				assert.equal Crixalis.logger, console
@@ -90,13 +89,10 @@ Crixalis     = require '../lib'
 					Crixalis.define('feature::test')
 
 			views: ->
-				assert.isFalse Crixalis.has('xml')
+				assert.doesNotThrow -> Crixalis.define('view::xml', ->)
 
-				Crixalis.define('view::xml', ->)
-
-				assert.isFalse Crixalis.has('xml')
-				assert.throws ->
-					Crixalis.define('view::xml', ->)
+				assert.throws -> Crixalis.define('view::xml', ->)
+				assert.throws -> Crixalis.define('view::auto', ->)
 
 		instance:
 			topic: ->

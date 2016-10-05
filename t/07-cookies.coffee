@@ -75,7 +75,7 @@ Crixalis
 
 				response: (error, response) ->
 					assert not error
-					assert.equal response.statusCode, 200
+					assert.equal response.statusCode, 204
 
 			get:
 				topic: (topic) ->
@@ -89,5 +89,5 @@ Crixalis
 
 				response: (error, response) ->
 					assert not error
-					assert.equal response.statusCode, 200
+					assert.equal response.statusCode, 204
 	.export(module)

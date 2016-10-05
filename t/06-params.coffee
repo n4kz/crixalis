@@ -81,7 +81,7 @@ vows
 
 				response: (error, response) ->
 					assert not error
-					assert.equal response.statusCode, 200
+					assert.equal response.statusCode, 204
 
 			get1:
 				topic: (topic) ->
@@ -92,7 +92,7 @@ vows
 
 				response: (error, response) ->
 					assert not error
-					assert.equal response.statusCode, 200
+					assert.equal response.statusCode, 204
 
 			get2:
 				topic: (topic) ->
@@ -103,7 +103,7 @@ vows
 
 				response: (error, response) ->
 					assert not error
-					assert.equal response.statusCode, 200
+					assert.equal response.statusCode, 204
 
 			post1:
 				topic: (topic) ->

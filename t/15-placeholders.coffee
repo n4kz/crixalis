@@ -22,8 +22,6 @@ request = (options) ->
 
 matches = (expected) ->
 	return (error, response) ->
-		data = JSON.parse(response.body)
-
 		assert.equal     expected.code, response.statusCode
 		assert.deepEqual expected.data, JSON.parse(response.body)
 

@@ -44,6 +44,9 @@ Crixalis
 			feature: ->
 				assert.isTrue Crixalis.has('static')
 
+			view: ->
+				assert.throws -> Crixalis.define('view::file', ->)
+
 		ifmodsince200:
 			topic: ->
 				params =
