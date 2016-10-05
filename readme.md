@@ -5,9 +5,9 @@ Lightweight web framework for node.js
 # Features
 
 - Small, documented and easily extendable core
-- Advanced routing system (content type, method, host) with regexp support and placeholders
+- Advanced routing system (content type, method, host) with RegExp support and placeholders
 - Compression support (gzip, deflate)
-- Static file serving support
+- Static file serving support (with __ETag__, __Last-Modified__, __Expires__ and LRU-cache)
 
 # Synopsis
 
@@ -19,8 +19,9 @@ var Crixalis = require('crixalis');
 
 Crixalis
 
-	/* Load plugin */
+	/* Load plugins */
 	.plugin('shortcuts')
+	.plugin('access', { format: '%7T %-4m %s %9B %-15h %U%q' })
 
 	/* Add route with placeholder */
 	.get('/hello/:name', function () {
@@ -65,7 +66,7 @@ Crixalis
 
 Available core plugins
 
-- `access`      Log all processed requests
+- `access`      Access log (with configurable CLF support)
 - `compression` Compress response using `gzip` or `deflate` compression (also works with `static` plugin)
 - `request`     Thin wrapper around `http.request` and `https.request`
 - `shortcuts`   Route declaration helpers, `.get()`, `.post()`, etc.
@@ -76,11 +77,11 @@ Available core plugins
 Crixalis comes with script for serving static files
 
 ```bash
-	# Start web server on port `3000` and serve files from `~/www/`
-	crixalis --port 3000 --path ~/www/
-
 	# Start web server on port `8080` and serve files from current folder
 	crixalis
+
+	# Start web server on port `3000` and serve files from `~/www/`
+	crixalis --port 3000 --path ~/www/
 ```
 
 # Copyright and License
