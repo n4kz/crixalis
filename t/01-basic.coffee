@@ -78,4 +78,24 @@ Crixalis     = require '../lib'
 				assert.isTrue   Crixalis.propertyIsEnumerable('property')
 				assert.equal    Crixalis.property, property
 
+			features: ->
+				assert.isFalse Crixalis.has('compression')
+				assert.isFalse Crixalis.has('static')
+				assert.isFalse Crixalis.has('test')
+
+				Crixalis.define('feature::test')
+
+				assert.isTrue Crixalis.has('test')
+				assert.throws ->
+					Crixalis.define('feature::test')
+
+			views: ->
+				assert.isFalse Crixalis.has('xml')
+
+				Crixalis.define('view::xml', ->)
+
+				assert.isFalse Crixalis.has('xml')
+				assert.throws ->
+					Crixalis.define('view::xml', ->)
+
 	.export(module)

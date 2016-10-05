@@ -46,6 +46,9 @@ Crixalis.view = 'json'
 				assert.equal result.headers['content-type'], 'application/json; charset=utf-8'
 				assert !('vary' of result.headers)
 
+			feature: ->
+				assert.isTrue Crixalis.has('compression')
+
 		gzip:
 			topic: ->
 				params =

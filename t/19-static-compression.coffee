@@ -55,6 +55,10 @@ catch error
 				assert.equal result.headers.vary, 'Accept-Encoding'
 				assert.match result.headers.etag, /^"[a-z0-9\/+]+-g"$/i
 
+			feature: ->
+				assert.isTrue Crixalis.has('static')
+				assert.isTrue Crixalis.has('compression')
+
 		deflate:
 			topic: ->
 				params =

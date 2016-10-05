@@ -41,6 +41,9 @@ Crixalis
 				assert.equal result.headers.vary, 'Accept-Encoding'
 				assert.match result.headers.etag, /^"[a-z0-9\/+]+"$/i
 
+			feature: ->
+				assert.isTrue Crixalis.has('static')
+
 		ifmodsince200:
 			topic: ->
 				params =
