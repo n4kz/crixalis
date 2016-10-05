@@ -98,4 +98,33 @@ Crixalis     = require '../lib'
 				assert.throws ->
 					Crixalis.define('view::xml', ->)
 
+		instance:
+			topic: ->
+				constructor = require('../lib/crixalis')
+				instance    = new constructor
+
+				instance.define('feature::namespace')
+				instance.define('view::empty', ->)
+
+				@callback null, instance
+
+			features: (instance) ->
+				assert.isTrue  instance.has('namespace')
+				assert.isFalse Crixalis.has('namespace')
+
+			views: (instance) ->
+				assert.throws       -> instance.define('view::empty', ->)
+				assert.doesNotThrow -> Crixalis.define('view::empty', ->)
+
+			inheritance: (instance) ->
+				assert.instanceOf instance, Crixalis.constructor
+				assert.instanceOf instance, EventEmitter
+
+			constructor: (instance) ->
+				assert.equal instance.constructor, Crixalis.constructor
+				assert.equal instance.constructor, require('../lib/crixalis')
+
+			reference: (instance) ->
+				assert.notEqual Crixalis, instance
+
 	.export(module)
