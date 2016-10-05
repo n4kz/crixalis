@@ -25,37 +25,33 @@ Crixalis
 
 	/* Add route with placeholder */
 	.get('/hello/:name', function () {
-		/* Prepare data for view */
+		/* Prepare data for response */
 		this.stash.json = {
 			message: 'Hello, ' + this.params.name + '!'
 		};
 
-		/* Send result using json view */
-		this.render('json');
+		/* Render response */
+		this.render();
 	})
 
 	/* Add another route for GET and HEAD methods */
 	.route('/info', { methods: ['GET', 'HEAD'] }, function () {
 		var that = this;
 
-		require('fs').readFile('./package.json', function (error, result) {
+		require('fs').readFile('./readme.md', function (error, result) {
 			if (error) {
 				/* Handle error */
-				that.error(500);
+				that.error(error);
 			} else {
-				/* Set response body */
 				that.body = result;
+				that.render();
 			}
-
-			/* Send result */
-			that.render();
 		});
 	})
 
 	/* Catch everything else */
 	.route('*', function () {
 		this.redirect('/hello/World');
-		this.render();
 	})
 
 	/* Start server on port 8080 */
