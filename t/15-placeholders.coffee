@@ -5,154 +5,144 @@ Crixalis = require '../lib'
 port = +process.env.CRIXALIS_PORT + 15
 
 Crixalis
-	.start 'http', port
+	.start('http', port)
 	.unref()
 
+Crixalis.view = 'json'
+
+request = (options) ->
+	options.host   ?= 'localhost'
+	options.port   ?= port
+	options.path   ?= '/'
+	options.method ?= 'GET'
+
+	return ->
+		fetch options, @callback
+		return
+
+matches = (expected) ->
+	return (error, response) ->
+		data = JSON.parse(response.body)
+
+		assert.equal     expected.code, response.statusCode
+		assert.deepEqual expected.data, JSON.parse(response.body)
+
 # TODO: Indirect access
+defineRoute = (route) ->
+	Crixalis.route route, ->
+		@params.route = String(route)
+		@stash.json   = @params
 
-dummy = ->
+		@render()
 
-parts = ['alpha', 'bravo4_03', '_-_5690_i-', '+', '55']
+defineRoute route for route in [
+	'/',
+	'/static',
+	'/static/:action',
+	'/static/*',
+	'/:item',
+	'/:item/:action',
+	'/:item/*',
+	'*'
+]
 
 (require 'vows')
-	.describe('shortcuts')
+	.describe('placeholders')
 	.addBatch
-		placeholders:
-			topic: 'placeholders'
+		root:
+			topic: request
+				path: '/'
 
-			one: ->
-				route = Crixalis
-					.route('/:item/list', dummy)
-					._routes.pop()[0]
+			result: matches
+				code: 200
+				data:
+					route: '/'
 
-				for item in parts
-					context =
-						params: {}
-						url: "/#{item}/list"
+		static:
+			topic: request
+				path: '/static'
 
-					assert route.match context
-					assert.equal context.params.item, item
+			result: matches
+				code: 200
+				data:
+					route: '/static'
 
-			two: ->
-				route = Crixalis
-					.route('/:item/:action', dummy)
-					._routes.pop()[0]
+			action:
+				topic: request
+					path: '/static/index'
 
-				for item in parts
-					for action in parts
-						context =
-							params: {}
-							url: "/#{item}/#{action}"
+				result: matches
+					code: 200
+					data:
+						route: '/static/:action'
+						action: 'index'
 
-						assert route.match context
-						assert.equal context.params.item,   item
-						assert.equal context.params.action, action
+			extension:
+				topic: request
+					path: '/static/index.txt'
 
-			escape: ->
-				route = Crixalis
-					.route('/([^\/]+)/:action', dummy)
-					._routes.pop()[0]
+				result: matches
+					code: 200
+					data:
+						route: '/static/*'
 
-				for item in parts
-					for action in parts
-						context = url: "/#{item}/#{action}"
+			wildcard:
+				topic: request
+					path: '/static/files/index.txt'
 
-						assert not route.match context
+				result: matches
+					code: 200
+					data:
+						route: '/static/*'
 
-			invalid: ->
-				route = Crixalis
-					.route('/([^\\//:action', dummy)
-					._routes.pop()[0]
+		placeholder:
+			topic: request
+				path: '/index'
 
-				for item in parts
-					for action in parts
-						context =
-							url: "/#{item}/#{action}"
+			result: matches
+				code: 200
+				data:
+					route: '/:item'
+					item: 'index'
 
-						assert not route.match context
+			placeholder:
+				topic: request
+					path: '/index/files'
 
-			negative: ->
-				route = Crixalis
-					.route('/test/:item', dummy)
-					._routes.pop()[0]
+				result: matches
+					code: 200
+					data:
+						route: '/:item/:action'
+						item: 'index'
+						action: 'files'
 
-				for item in parts
-					for action in parts
-						context =
-							url     : "/#{item}/#{action}"
-							params  : {}
+			extension:
+				topic: request
+					path: '/index/files.txt'
 
-						assert not route.match context
+				result: matches
+					code: 200
+					data:
+						route: '/:item/*'
+						item: 'index'
 
-				assert not route.match url: '/test/file.jpg', params: {}
-				assert     route.match url: '/test/file',     params: {}
+			wildcard:
+				topic: request
+					path: '/index/files/list.txt'
 
-			'asterisk#middle': ->
-				route = Crixalis
-					.route('/*/alpha', dummy)
-					._routes.pop()[0]
+				result: matches
+					code: 200
+					data:
+						route: '/:item/*'
+						item: 'index'
 
-				for item in parts
-					for action in parts
-						context = url: "/#{item}/#{action}"
+		extension:
+			topic: request
+				path: '/index.txt'
 
-						if action is 'alpha'
-							assert route.match context
-						else
-							assert not route.match context
-
-			'asterisk#end': ->
-				route = Crixalis
-					.route('/alpha/*', dummy)
-					._routes.pop()[0]
-
-				for item in parts
-					for action in parts
-						context = url: "/#{item}/#{action}"
-
-						if item is 'alpha'
-							assert route.match context
-						else
-							assert not route.match context
-
-			'asterisk#double': ->
-				route = Crixalis
-					.route('/*/test/*', dummy)
-					._routes.pop()[0]
-
-				for item in parts
-					for action in parts
-						context = url: "/#{item}/test/#{action}"
-
-						assert route.match context
-
-				assert not route.match url: '/notesthere'
-				assert not route.match url: '/abc/test/'
-				assert not route.match url: '//test/abc'
-
-			everything: ->
-				route = Crixalis
-					.route('*', dummy)
-					._routes.pop()[0]
-
-				for item in parts
-					for action in parts
-						context = url: "/#{item}/#{action}"
-
-						assert route.match context
-
-			tail: ->
-				route = Crixalis
-					.route('*/:tail', dummy)
-					._routes.pop()[0]
-
-				for item in parts
-					for action in parts
-						context =
-							params : {}
-							url    : "/#{item}/#{action}"
-
-						assert route.match context
-						assert.equal context.params.tail, action
+			result: matches
+				code: 200
+				data:
+					route: '*'
 
 	.export(module)
